@@ -65,7 +65,6 @@ private:
     void countArgs(const std::string &args, int32_t &argc);
     void tokenizeArgs(const std::string &args, const int32_t &argc, char ***argv);
     void updateIndices();
-    void outputStats();
 
     uint64_t calcBytes(const Spatter::ConfigurationBase *config);
     size_t getPatternSize(const Spatter::ConfigurationBase *config);
@@ -88,8 +87,6 @@ private:
 
     Statistic<uint64_t>* statReadBytes;
     Statistic<uint64_t>* statWriteBytes;
-    Statistic<uint64_t>* statReqLatency;
-    Statistic<uint64_t>* statCycles;
 
     MirandaRequestQueue<GeneratorRequest*>* queue;
 

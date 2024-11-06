@@ -17,8 +17,11 @@ gen.addParams({
     "args" : " ".join(sys.argv[1:])
 })
 
+# Tell SST what statistics handling we want
+sst.setStatisticLoadLevel(4)
+
 # Enable statistics outputs
-comp_cpu.enableAllStatistics()
+comp_cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
 
 comp_l1cache = sst.Component("l1cache", "memHierarchy.Cache")
 comp_l1cache.addParams({
@@ -55,3 +58,5 @@ link_cpu_cache_link.setNoCut()
 
 link_mem_bus_link = sst.Link("link_mem_bus_link")
 link_mem_bus_link.connect( (comp_l1cache, "low_network_0", "50ps"), (comp_memctrl, "direct_link", "50ps") )
+
+sst.setStatisticOutput("sst.statOutputCSV")

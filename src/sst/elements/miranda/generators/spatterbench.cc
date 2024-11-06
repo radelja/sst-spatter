@@ -47,8 +47,6 @@ void SpatterBenchGenerator::build(Params& params)
 
     statReadBytes  = registerStatistic<uint64_t>( "total_bytes_read" );
     statWriteBytes = registerStatistic<uint64_t>( "total_bytes_write" );
-    statReqLatency = registerStatistic<uint64_t>( "req_latency" );
-    statCycles     = registerStatistic<uint64_t>( "cycles" );
 
     // Convert the arguments to a compatible format before parsing them.
     countArgs(args, argc);
@@ -82,20 +80,6 @@ void SpatterBenchGenerator::build(Params& params)
     } else {
         out->verbose(CALL_INFO, 0, 0, "Warning: source and target arrays will overlap.\n");
     }
-
-
-    // Output the specified arguments for each run-configuration.
-    std::ostringstream oss;
-    oss << cl;
-    out->output("\n%s", oss.str().c_str());
-
-    // Output the header for the Spatter statistics.
-    out->output("\n%-15s", "config");
-    out->output("%-15s",   "bytes");
-    out->output("%-15s",   "time(s)");
-    out->output("%-15s",   "bw(MB/s)");
-    out->output("%-15s",   "cycles");
-    out->output("%-15s\n", "time(s)/cycles");
 }
 
 SpatterBenchGenerator::~SpatterBenchGenerator()
@@ -142,14 +126,12 @@ bool SpatterBenchGenerator::isFinished()
         // Check if the requests associated with the previous run-configuration have been executed.
         if (recordedBytes == expectedBytes) {
             // The requests associated with the previous run-configuration have finished executing.
-            outputStats();
+            performGlobalStatisticOutput();
             configFin = false;
 
             // Reset the statistics for the next run-configuration.
             statReadBytes->setCollectionCount(0);
             statWriteBytes->setCollectionCount(0);
-            statReqLatency->setCollectionCount(0);
-            statCycles->setCollectionCount(0);
         }
     }
 
@@ -158,7 +140,6 @@ bool SpatterBenchGenerator::isFinished()
 
 void SpatterBenchGenerator::completed()
 {
-    out->output("\n");
 }
 
 /**
@@ -274,35 +255,6 @@ void SpatterBenchGenerator::updateIndices()
     } else {
         ++patternIdx;
     }
-}
-
-/**
-   * @brief Output the statistics for the previous Spatter pattern.
-   *
-   */
-void SpatterBenchGenerator::outputStats()
-{
-    const Spatter::ConfigurationBase *config = cl.configs[configIdx-1].get();
-    uint64_t statBytes = calcBytes(config);
-
-    double latencySeconds;
-    double bandwidth;
-    double timePerCycle;
-
-    // Convert the request latency from nanoseconds to seconds.
-    latencySeconds = statReqLatency->getCollectionCount() / 1'000'000'000.0;
-
-    // Convert the recorded bytes to megabytes before calculating the bandwidth.
-    bandwidth = (statBytes / 1'000'000.0) / latencySeconds;
-
-    timePerCycle = latencySeconds / statCycles->getCollectionCount();
-
-    out->output("%-15lu",  config->id);
-    out->output("%-15lu",  statBytes);
-    out->output("%-15g",   latencySeconds);
-    out->output("%-15.2f", bandwidth);
-    out->output("%-15lu",  statCycles->getCollectionCount());
-    out->output("%-15g\n", timePerCycle);
 }
 
 /**
