@@ -51,9 +51,7 @@ public:
         { "args",                "Sets the arguments to describe Spatter pattern(s)", "" },
         { "datawidth",           "Sets the width of the memory operation", "8" },
         { "start_source",        "Sets the start address of the source array", "0" },
-        { "start_target",        "Sets the start address of the target array", "0" },
-        { "warmup_runs",         "Sets the number of warm-up runs", "10" },
-        { "only_warmup_first",   "Only the first config will use warm-up runs", "0" }
+        { "start_target",        "Sets the start address of the target array", "0" }
     )
 
     SST_ELI_DOCUMENT_STATISTICS(
@@ -81,15 +79,11 @@ private:
     uint32_t datawidth;
     uint32_t startSource;
     uint32_t startTarget;
-    uint32_t warmupRuns;
 
     size_t patternIdx;
     size_t countIdx;
-    size_t warmupIdx;
     size_t configIdx;
 
-    bool warmupAll;
-    bool warmupFin;
     bool configFin;
 
     Statistic<uint64_t>* statReadBytes;

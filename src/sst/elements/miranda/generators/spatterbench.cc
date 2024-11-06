@@ -38,15 +38,11 @@ void SpatterBenchGenerator::build(Params& params)
     out = new Output("SpatterBenchGenerator[@p:@l]: ", verbose, 0, Output::STDOUT);
 
     datawidth  = params.find<uint32_t>("datawidth", 8);
-    warmupRuns = params.find<uint32_t>("warmup_runs", 10);
 
     patternIdx = 0;
     countIdx   = 0;
-    warmupIdx  = 0;
     configIdx  = 0;
 
-    warmupAll = !params.find<bool>("only_warmup_first", false);
-    warmupFin = (0 == warmupRuns);
     configFin = false;
 
     statReadBytes  = registerStatistic<uint64_t>( "total_bytes_read" );
@@ -133,7 +129,7 @@ void SpatterBenchGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
 
 bool SpatterBenchGenerator::isFinished()
 {
-    if (configFin && warmupFin) {
+    if (configFin) {
         const Spatter::ConfigurationBase *prevConfig = cl.configs[configIdx-1].get();
         uint64_t expectedBytes = getPatternSize(prevConfig) * prevConfig->count * datawidth;
         uint64_t recordedBytes = calcBytes(prevConfig);
@@ -143,26 +139,10 @@ bool SpatterBenchGenerator::isFinished()
             expectedBytes <<= 1;
         }
 
-        if ((0 != warmupIdx) && (0 != warmupRuns)) {
-            // Completed warm-up runs for the previous run-configuration.
-            recordedBytes /= warmupRuns;
-        }
-
         // Check if the requests associated with the previous run-configuration have been executed.
         if (recordedBytes == expectedBytes) {
-            if (0 != warmupIdx) {
-                // Completed warm-up runs for the previous run-configuration.
-                warmupIdx = 0;
-                --configIdx;
-            } else {
-                // The requests associated with the previous run-configuration have finished executing.
-                outputStats();
-
-                // Reset the warm-up flag after each run-configuration has been completed.
-                if (warmupAll) {
-                    warmupFin = (0 == warmupRuns);
-                }
-            }
+            // The requests associated with the previous run-configuration have finished executing.
+            outputStats();
             configFin = false;
 
             // Reset the statistics for the next run-configuration.
@@ -284,19 +264,10 @@ void SpatterBenchGenerator::updateIndices()
         patternIdx = 0;
         if (countIdx == (config->count - 1)) {
             countIdx = 0;
-            if (!warmupFin) {
-                // Check if the warm-up runs for the current run-configuration have completed.
-                if (warmupIdx == (warmupRuns - 1)) {
-                    warmupFin = true;
-                } else {
-                    ++warmupIdx;
-                }
-            }
-            if (warmupFin) {
-                // Finished issuing requests for the current run-configuration.
-                configFin = true;
-                ++configIdx;
-            }
+
+            // Finished issuing requests for the current run-configuration.
+            configFin = true;
+            ++configIdx;
         } else {
             ++countIdx;
         }
