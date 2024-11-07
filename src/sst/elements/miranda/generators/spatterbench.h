@@ -56,9 +56,7 @@ public:
 
     SST_ELI_DOCUMENT_STATISTICS(
         { "total_bytes_read",    "Count the total bytes requested by read operations", "bytes", 1 },
-        { "total_bytes_write",   "Count the total bytes requested by write operations", "bytes", 1 },
-        { "req_latency",         "Running total of all latency for all requests", "ns", 2 },
-        { "cycles",              "Cycles executed", "cycles", 1 }
+        { "total_bytes_write",   "Count the total bytes requested by write operations", "bytes", 1 }
     )
 
 private:
@@ -85,8 +83,7 @@ private:
 
     bool configFin;
 
-    Statistic<uint64_t>* statReadBytes;
-    Statistic<uint64_t>* statWriteBytes;
+    Statistic<uint64_t>* statBytes[OPCOUNT];
 
     MirandaRequestQueue<GeneratorRequest*>* queue;
 

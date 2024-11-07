@@ -37,9 +37,6 @@ comp_l1cache.addParams({
       "cache_size" : "32KB"
 })
 
-# Enable statistics outputs
-comp_l1cache.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
-
 comp_memctrl = sst.Component("memory", "memHierarchy.MemController")
 comp_memctrl.addParams({
       "clock" : "1GHz",

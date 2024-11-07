@@ -45,8 +45,14 @@ void SpatterBenchGenerator::build(Params& params)
 
     configFin = false;
 
-    statReadBytes  = registerStatistic<uint64_t>( "total_bytes_read" );
-    statWriteBytes = registerStatistic<uint64_t>( "total_bytes_write" );
+    statBytes[READ] = registerStatistic<uint64_t>("total_bytes_read");
+    statBytes[WRITE] = registerStatistic<uint64_t>("total_bytes_write");
+
+    statBytes[READ]->setFlagClearDataOnOutput(true);
+    statBytes[WRITE]->setFlagClearDataOnOutput(true);
+
+    statBytes[READ]->setFlagOutputAtEndOfSim(false);
+    statBytes[WRITE]->setFlagOutputAtEndOfSim(false);
 
     // Convert the arguments to a compatible format before parsing them.
     countArgs(args, argc);
@@ -128,10 +134,6 @@ bool SpatterBenchGenerator::isFinished()
             // The requests associated with the previous run-configuration have finished executing.
             performGlobalStatisticOutput();
             configFin = false;
-
-            // Reset the statistics for the next run-configuration.
-            statReadBytes->setCollectionCount(0);
-            statWriteBytes->setCollectionCount(0);
         }
     }
 
@@ -198,11 +200,11 @@ uint64_t SpatterBenchGenerator::calcBytes(const Spatter::ConfigurationBase *conf
     uint64_t numBytes = 0;
 
     if ((0 == config->kernel.compare("gather")) || (0 == config->kernel.compare("multigather"))) {
-        numBytes = statReadBytes->getCollectionCount() * datawidth;
+        numBytes = statBytes[READ]->getCollectionCount() * datawidth;
     } else if ((0 == config->kernel.compare("scatter")) || (0 == config->kernel.compare("multiscatter"))) {
-        numBytes = statWriteBytes->getCollectionCount() * datawidth;
+        numBytes = statBytes[WRITE]->getCollectionCount() * datawidth;
     } else if (0 == config->kernel.compare("sg")) {
-        numBytes = (statWriteBytes->getCollectionCount() + statReadBytes->getCollectionCount()) * datawidth;
+        numBytes = (statBytes[WRITE]->getCollectionCount() + statBytes[READ]->getCollectionCount()) * datawidth;
     }
 
     return numBytes;
