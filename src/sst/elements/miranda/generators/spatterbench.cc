@@ -45,14 +45,59 @@ void SpatterBenchGenerator::build(Params& params)
 
     configFin = false;
 
-    statBytes[READ] = registerStatistic<uint64_t>("total_bytes_read");
-    statBytes[WRITE] = registerStatistic<uint64_t>("total_bytes_write");
+    statReqs[READ]            = registerStatistic<uint64_t>("read_reqs");
+    statReqs[WRITE]           = registerStatistic<uint64_t>("write_reqs");
+    statReqs[CUSTOM]          = registerStatistic<uint64_t>("custom_reqs");
+    statSplitReqs[READ]       = registerStatistic<uint64_t>("split_read_reqs");
+    statSplitReqs[WRITE]      = registerStatistic<uint64_t>("split_write_reqs");
+    statSplitReqs[CUSTOM]     = registerStatistic<uint64_t>("split_custom_reqs");
+    statCyclesWithIssue       = registerStatistic<uint64_t>("cycles_with_issue");
+    statCyclesWithoutIssue    = registerStatistic<uint64_t>("cycles_no_issue");
+    statBytes[READ]           = registerStatistic<uint64_t>("total_bytes_read");
+    statBytes[WRITE]          = registerStatistic<uint64_t>("total_bytes_write");
+    statBytes[CUSTOM]         = registerStatistic<uint64_t>("total_bytes_custom");
+    statReqLatency            = registerStatistic<uint64_t>("req_latency");
+    statTime                  = registerStatistic<uint64_t>("time");
+    statCyclesHitFence        = registerStatistic<uint64_t>("cycles_hit_fence");
+    statMaxIssuePerCycle      = registerStatistic<uint64_t>("cycles_max_issue");
+    statCyclesHitReorderLimit = registerStatistic<uint64_t>("cycles_max_reorder");
+    statCycles                = registerStatistic<uint64_t>("cycles");
 
+    statReqs[READ]->setFlagClearDataOnOutput(true);
+    statReqs[WRITE]->setFlagClearDataOnOutput(true);
+    statReqs[CUSTOM]->setFlagClearDataOnOutput(true);
+    statSplitReqs[READ]->setFlagClearDataOnOutput(true);
+    statSplitReqs[WRITE]->setFlagClearDataOnOutput(true);
+    statSplitReqs[CUSTOM]->setFlagClearDataOnOutput(true);
+    statCyclesWithIssue->setFlagClearDataOnOutput(true);
+    statCyclesWithoutIssue->setFlagClearDataOnOutput(true);
     statBytes[READ]->setFlagClearDataOnOutput(true);
     statBytes[WRITE]->setFlagClearDataOnOutput(true);
+    statBytes[CUSTOM]->setFlagClearDataOnOutput(true);
+    statReqLatency->setFlagClearDataOnOutput(true);
+    statTime->setFlagClearDataOnOutput(true);
+    statCyclesHitFence->setFlagClearDataOnOutput(true);
+    statMaxIssuePerCycle->setFlagClearDataOnOutput(true);
+    statCyclesHitReorderLimit->setFlagClearDataOnOutput(true);
+    statCycles->setFlagClearDataOnOutput(true);
 
+    statReqs[READ]->setFlagOutputAtEndOfSim(false);
+    statReqs[WRITE]->setFlagOutputAtEndOfSim(false);
+    statReqs[CUSTOM]->setFlagOutputAtEndOfSim(false);
+    statSplitReqs[READ]->setFlagOutputAtEndOfSim(false);
+    statSplitReqs[WRITE]->setFlagOutputAtEndOfSim(false);
+    statSplitReqs[CUSTOM]->setFlagOutputAtEndOfSim(false);
+    statCyclesWithIssue->setFlagOutputAtEndOfSim(false);
+    statCyclesWithoutIssue->setFlagOutputAtEndOfSim(false);
     statBytes[READ]->setFlagOutputAtEndOfSim(false);
     statBytes[WRITE]->setFlagOutputAtEndOfSim(false);
+    statBytes[CUSTOM]->setFlagOutputAtEndOfSim(false);
+    statReqLatency->setFlagOutputAtEndOfSim(false);
+    statTime->setFlagOutputAtEndOfSim(false);
+    statCyclesHitFence->setFlagOutputAtEndOfSim(false);
+    statMaxIssuePerCycle->setFlagOutputAtEndOfSim(false);
+    statCyclesHitReorderLimit->setFlagOutputAtEndOfSim(false);
+    statCycles->setFlagOutputAtEndOfSim(false);
 
     // Convert the arguments to a compatible format before parsing them.
     countArgs(args, argc);
