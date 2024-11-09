@@ -84,7 +84,7 @@ private:
 
     void gather();
     void scatter();
-    void scatterGather();
+    void gatherScatter();
     void multiGather();
     void multiScatter();
 

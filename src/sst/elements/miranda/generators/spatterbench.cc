@@ -148,8 +148,8 @@ void SpatterBenchGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
             gather();
         } else if (0 == config->kernel.compare("scatter")) {
             scatter();
-        } else if (0 == config->kernel.compare("sg")) {
-            scatterGather();
+        } else if (0 == config->kernel.compare("gs")) {
+            gatherScatter();
         } else if (0 == config->kernel.compare("multigather")) {
             multiGather();
         } else if (0 == config->kernel.compare("multiscatter")) {
@@ -169,7 +169,7 @@ bool SpatterBenchGenerator::isFinished()
         uint64_t expectedBytes = getPatternSize(prevConfig) * prevConfig->count * datawidth;
         uint64_t recordedBytes = calcBytes(prevConfig);
 
-        if (0 == prevConfig->kernel.compare("sg")) {
+        if (0 == prevConfig->kernel.compare("gs")) {
             // GS patterns expect twice the number of bytes.
             expectedBytes <<= 1;
         }
@@ -248,7 +248,7 @@ uint64_t SpatterBenchGenerator::calcBytes(const Spatter::ConfigurationBase *conf
         numBytes = statBytes[READ]->getCollectionCount() * datawidth;
     } else if ((0 == config->kernel.compare("scatter")) || (0 == config->kernel.compare("multiscatter"))) {
         numBytes = statBytes[WRITE]->getCollectionCount() * datawidth;
-    } else if (0 == config->kernel.compare("sg")) {
+    } else if (0 == config->kernel.compare("gs")) {
         numBytes = (statBytes[WRITE]->getCollectionCount() + statBytes[READ]->getCollectionCount()) * datawidth;
     }
 
@@ -267,7 +267,7 @@ size_t SpatterBenchGenerator::getPatternSize(const Spatter::ConfigurationBase *c
 
     if ((0 == config->kernel.compare("gather")) || (0 == config->kernel.compare("scatter"))) {
         patternSize = config->pattern.size();
-    } else if ((0 == config->kernel.compare("sg"))) {
+    } else if ((0 == config->kernel.compare("gs"))) {
         assert(config->pattern_scatter.size() == config->pattern_gather.size());
         patternSize = config->pattern_scatter.size();
     } else if (0 == config->kernel.compare("multigather")) {
@@ -338,7 +338,7 @@ void SpatterBenchGenerator::scatter()
    * @brief Generate memory requests for a GS pattern.
    *
    */
-void SpatterBenchGenerator::scatterGather()
+void SpatterBenchGenerator::gatherScatter()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
 
