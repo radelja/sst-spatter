@@ -140,6 +140,7 @@ RequestGenCPU::RequestGenCPU(SST::ComponentId_t id, SST::Params& params) :
 	statSplitReqs[READ] 	  = registerStatistic<uint64_t>( "split_read_reqs" );
 	statSplitReqs[WRITE]      = registerStatistic<uint64_t>( "split_write_reqs" );
 	statSplitReqs[CUSTOM]  	  = registerStatistic<uint64_t>( "split_custom_reqs" );
+	statCompletedReqs         = registerStatistic<uint64_t>( "completed_reqs" );
 	statCyclesWithIssue 	  = registerStatistic<uint64_t>( "cycles_with_issue" );
 	statCyclesWithoutIssue 	  = registerStatistic<uint64_t>( "cycles_no_issue" );
 	statBytes[READ] 	  = registerStatistic<uint64_t>( "total_bytes_read" );
@@ -240,6 +241,8 @@ void RequestGenCPU::handleEvent( Interfaces::StandardMem::Request* ev) {
 		if(cpuReq->completed()) {
 			out->verbose(CALL_INFO, 4, 0, "-> Entry has all parts satisfied, removing ID=%" PRIu64 ", total processing time: %" PRIu64 "ns\n",
 				cpuReq->getOriginalReqID(), (getCurrentSimTimeNano() - cpuReq->getIssueTime()));
+
+			statCompletedReqs->addData(1);
 
 			// Notify every pending request that there may be a satisfied dependency
 			for(uint32_t i = 0; i < pendingRequests.size(); ++i) {

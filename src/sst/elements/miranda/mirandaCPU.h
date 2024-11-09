@@ -99,6 +99,7 @@ public:
         { "read_reqs",          "Number of read requests issued",                               "requests", 1 },
         { "write_reqs",         "Number of write requests issued",                              "requests", 1 },
         { "custom_reqs",        "Number of custom requests issued",                             "requests", 1 },
+        { "completed_reqs",     "Number of completed requests",                                 "requests", 2 },
         { "total_bytes_read",   "Count the total bytes requested by read operations",           "bytes",    1 },
         { "total_bytes_write",  "Count the total bytes requested by write operations",          "bytes",    1 },
         { "total_bytes_custom", "Count the total bytes requested by custom operations",         "bytes",    1 },
@@ -158,6 +159,7 @@ private:
 
     Statistic<uint64_t>* statReqs[OPCOUNT];
 	Statistic<uint64_t>* statSplitReqs[OPCOUNT];
+	Statistic<uint64_t>* statCompletedReqs;
 	Statistic<uint64_t>* statCyclesWithIssue;
 	Statistic<uint64_t>* statMaxIssuePerCycle;
 	Statistic<uint64_t>* statCyclesWithoutIssue;
