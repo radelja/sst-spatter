@@ -51,6 +51,7 @@ void SpatterBenchGenerator::build(Params& params)
     statSplitReqs[READ]       = registerStatistic<uint64_t>("split_read_reqs");
     statSplitReqs[WRITE]      = registerStatistic<uint64_t>("split_write_reqs");
     statSplitReqs[CUSTOM]     = registerStatistic<uint64_t>("split_custom_reqs");
+    statCompletedReqs         = registerStatistic<uint64_t>("completed_reqs");
     statCyclesWithIssue       = registerStatistic<uint64_t>("cycles_with_issue");
     statCyclesWithoutIssue    = registerStatistic<uint64_t>("cycles_no_issue");
     statBytes[READ]           = registerStatistic<uint64_t>("total_bytes_read");
@@ -69,6 +70,7 @@ void SpatterBenchGenerator::build(Params& params)
     statSplitReqs[READ]->setFlagClearDataOnOutput(true);
     statSplitReqs[WRITE]->setFlagClearDataOnOutput(true);
     statSplitReqs[CUSTOM]->setFlagClearDataOnOutput(true);
+    statCompletedReqs->setFlagClearDataOnOutput(true);
     statCyclesWithIssue->setFlagClearDataOnOutput(true);
     statCyclesWithoutIssue->setFlagClearDataOnOutput(true);
     statBytes[READ]->setFlagClearDataOnOutput(true);
@@ -87,6 +89,7 @@ void SpatterBenchGenerator::build(Params& params)
     statSplitReqs[READ]->setFlagOutputAtEndOfSim(false);
     statSplitReqs[WRITE]->setFlagOutputAtEndOfSim(false);
     statSplitReqs[CUSTOM]->setFlagOutputAtEndOfSim(false);
+    statCompletedReqs->setFlagOutputAtEndOfSim(false);
     statCyclesWithIssue->setFlagOutputAtEndOfSim(false);
     statCyclesWithoutIssue->setFlagOutputAtEndOfSim(false);
     statBytes[READ]->setFlagOutputAtEndOfSim(false);
@@ -166,16 +169,16 @@ bool SpatterBenchGenerator::isFinished()
 {
     if (configFin) {
         const Spatter::ConfigurationBase *prevConfig = cl.configs[configIdx-1].get();
-        uint64_t expectedBytes = getPatternSize(prevConfig) * prevConfig->count * datawidth;
-        uint64_t recordedBytes = calcBytes(prevConfig);
+        uint64_t expectedCount = getPatternSize(prevConfig) * prevConfig->count;
+        uint64_t recordedCount = statCompletedReqs->getCollectionCount();
 
         if (0 == prevConfig->kernel.compare("gs")) {
             // GS patterns expect twice the number of bytes.
-            expectedBytes <<= 1;
+            expectedCount <<= 1;
         }
 
         // Check if the requests associated with the previous run-configuration have been executed.
-        if (recordedBytes == expectedBytes) {
+        if (recordedCount == expectedCount) {
             // The requests associated with the previous run-configuration have finished executing.
             performGlobalStatisticOutput();
             configFin = false;
@@ -232,27 +235,6 @@ void SpatterBenchGenerator::tokenizeArgs(const std::string &args, const int32_t 
     argvPtr[argvIdx] = nullptr;
 
     *argv = argvPtr;
-}
-
-/**
-   * @brief Calculate the number of bytes read or written by memory requests.
-   *
-   * @param config Run-configuration used to determine the kernel type.
-   * @return Number of bytes read or written by memory requests.
-   */
-uint64_t SpatterBenchGenerator::calcBytes(const Spatter::ConfigurationBase *config)
-{
-    uint64_t numBytes = 0;
-
-    if ((0 == config->kernel.compare("gather")) || (0 == config->kernel.compare("multigather"))) {
-        numBytes = statBytes[READ]->getCollectionCount() * datawidth;
-    } else if ((0 == config->kernel.compare("scatter")) || (0 == config->kernel.compare("multiscatter"))) {
-        numBytes = statBytes[WRITE]->getCollectionCount() * datawidth;
-    } else if (0 == config->kernel.compare("gs")) {
-        numBytes = (statBytes[WRITE]->getCollectionCount() + statBytes[READ]->getCollectionCount()) * datawidth;
-    }
-
-    return numBytes;
 }
 
 /**
