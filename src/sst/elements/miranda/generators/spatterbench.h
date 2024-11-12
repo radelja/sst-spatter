@@ -78,6 +78,7 @@ public:
 private:
     void countArgs(const std::string &args, int32_t &argc);
     void tokenizeArgs(const std::string &args, const int32_t &argc, char ***argv);
+    void setStatFlags(Statistic<uint64_t>* stat);
     void updateIndices();
 
     size_t getPatternSize(const Spatter::ConfigurationBase *config);

@@ -64,43 +64,25 @@ void SpatterBenchGenerator::build(Params& params)
     statCyclesHitReorderLimit = registerStatistic<uint64_t>("cycles_max_reorder");
     statCycles                = registerStatistic<uint64_t>("cycles");
 
-    statReqs[READ]->setFlagClearDataOnOutput(true);
-    statReqs[WRITE]->setFlagClearDataOnOutput(true);
-    statReqs[CUSTOM]->setFlagClearDataOnOutput(true);
-    statSplitReqs[READ]->setFlagClearDataOnOutput(true);
-    statSplitReqs[WRITE]->setFlagClearDataOnOutput(true);
-    statSplitReqs[CUSTOM]->setFlagClearDataOnOutput(true);
-    statCompletedReqs->setFlagClearDataOnOutput(true);
-    statCyclesWithIssue->setFlagClearDataOnOutput(true);
-    statCyclesWithoutIssue->setFlagClearDataOnOutput(true);
-    statBytes[READ]->setFlagClearDataOnOutput(true);
-    statBytes[WRITE]->setFlagClearDataOnOutput(true);
-    statBytes[CUSTOM]->setFlagClearDataOnOutput(true);
-    statReqLatency->setFlagClearDataOnOutput(true);
-    statTime->setFlagClearDataOnOutput(true);
-    statCyclesHitFence->setFlagClearDataOnOutput(true);
-    statMaxIssuePerCycle->setFlagClearDataOnOutput(true);
-    statCyclesHitReorderLimit->setFlagClearDataOnOutput(true);
-    statCycles->setFlagClearDataOnOutput(true);
-
-    statReqs[READ]->setFlagOutputAtEndOfSim(false);
-    statReqs[WRITE]->setFlagOutputAtEndOfSim(false);
-    statReqs[CUSTOM]->setFlagOutputAtEndOfSim(false);
-    statSplitReqs[READ]->setFlagOutputAtEndOfSim(false);
-    statSplitReqs[WRITE]->setFlagOutputAtEndOfSim(false);
-    statSplitReqs[CUSTOM]->setFlagOutputAtEndOfSim(false);
-    statCompletedReqs->setFlagOutputAtEndOfSim(false);
-    statCyclesWithIssue->setFlagOutputAtEndOfSim(false);
-    statCyclesWithoutIssue->setFlagOutputAtEndOfSim(false);
-    statBytes[READ]->setFlagOutputAtEndOfSim(false);
-    statBytes[WRITE]->setFlagOutputAtEndOfSim(false);
-    statBytes[CUSTOM]->setFlagOutputAtEndOfSim(false);
-    statReqLatency->setFlagOutputAtEndOfSim(false);
-    statTime->setFlagOutputAtEndOfSim(false);
-    statCyclesHitFence->setFlagOutputAtEndOfSim(false);
-    statMaxIssuePerCycle->setFlagOutputAtEndOfSim(false);
-    statCyclesHitReorderLimit->setFlagOutputAtEndOfSim(false);
-    statCycles->setFlagOutputAtEndOfSim(false);
+    // Set the Clear Data On Output and Output At End Of Sim flags.
+    setStatFlags(statReqs[READ]);
+    setStatFlags(statReqs[WRITE]);
+    setStatFlags(statReqs[CUSTOM]);
+    setStatFlags(statSplitReqs[READ]);
+    setStatFlags(statSplitReqs[WRITE]);
+    setStatFlags(statSplitReqs[CUSTOM]);
+    setStatFlags(statCompletedReqs);
+    setStatFlags(statCyclesWithIssue);
+    setStatFlags(statCyclesWithoutIssue);
+    setStatFlags(statBytes[READ]);
+    setStatFlags(statBytes[WRITE]);
+    setStatFlags(statBytes[CUSTOM]);
+    setStatFlags(statReqLatency);
+    setStatFlags(statTime);
+    setStatFlags(statCyclesHitFence);
+    setStatFlags(statMaxIssuePerCycle);
+    setStatFlags(statCyclesHitReorderLimit);
+    setStatFlags(statCycles);
 
     // Convert the arguments to a compatible format before parsing them.
     countArgs(args, argc);
@@ -172,14 +154,15 @@ bool SpatterBenchGenerator::isFinished()
         uint64_t expectedCount = getPatternSize(prevConfig) * prevConfig->count;
         uint64_t recordedCount = statCompletedReqs->getCollectionCount();
 
+        assert(recordedCount);
+
         if (0 == prevConfig->kernel.compare("gs")) {
             // GS patterns expect twice the number of bytes.
             expectedCount <<= 1;
         }
 
-        // Check if the requests associated with the previous run-configuration have been executed.
         if (recordedCount == expectedCount) {
-            // The requests associated with the previous run-configuration have finished executing.
+            // The requests associated with the previous run have completed.
             performGlobalStatisticOutput();
             configFin = false;
         }
@@ -238,6 +221,17 @@ void SpatterBenchGenerator::tokenizeArgs(const std::string &args, const int32_t 
 }
 
 /**
+   * @brief Set the Clear Data On Output and Output At End Of Sim flags.
+   *
+   * @param stat Statistic whose flags will be set.
+   */
+void SpatterBenchGenerator::setStatFlags(Statistic<uint64_t>* stat)
+{
+    stat->setFlagClearDataOnOutput(true);
+    stat->setFlagOutputAtEndOfSim(false);
+}
+
+/**
    * @brief Return the number of elements in the pattern.
    *
    * @param config Run-configuration used to determine the kernel type.
@@ -250,7 +244,6 @@ size_t SpatterBenchGenerator::getPatternSize(const Spatter::ConfigurationBase *c
     if ((0 == config->kernel.compare("gather")) || (0 == config->kernel.compare("scatter"))) {
         patternSize = config->pattern.size();
     } else if ((0 == config->kernel.compare("gs"))) {
-        assert(config->pattern_scatter.size() == config->pattern_gather.size());
         patternSize = config->pattern_scatter.size();
     } else if (0 == config->kernel.compare("multigather")) {
         patternSize = config->pattern_gather.size();
