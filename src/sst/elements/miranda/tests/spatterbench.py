@@ -1,5 +1,16 @@
 import sst
 import sys
+import argparse
+
+# Parse commandline arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--statfile", help="statistics file", default="./stats.out")
+parser.add_argument("--statlevel", help="statistics level", type=int, default=16)
+
+args, unknown = parser.parse_known_args()
+
+statFile = args.statfile
+statLevel = args.statlevel
 
 # Define SST core options
 sst.setProgramOption("timebase", "1ps")
@@ -14,11 +25,11 @@ comp_cpu.addParams({
 gen = comp_cpu.setSubComponent("generator", "miranda.SpatterBenchGenerator")
 gen.addParams({
     "verbose" : 2,
-    "args" : " ".join(sys.argv[1:])
+    "args" : " ".join(unknown)
 })
 
 # Tell SST what statistics handling we want
-sst.setStatisticLoadLevel(4)
+sst.setStatisticLoadLevel(statLevel)
 
 # Enable statistics outputs
 comp_cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
@@ -56,4 +67,4 @@ link_cpu_cache_link.setNoCut()
 link_mem_bus_link = sst.Link("link_mem_bus_link")
 link_mem_bus_link.connect( (comp_l1cache, "low_network_0", "50ps"), (comp_memctrl, "direct_link", "50ps") )
 
-sst.setStatisticOutput("sst.statOutputCSV")
+sst.setStatisticOutput("sst.statOutputCSV", {"filepath": statFile})
