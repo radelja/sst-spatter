@@ -3,7 +3,7 @@
 #
 
 # Set Version of SST Elements Library
-AC_INIT([SST Elements Library],[-dev],[sst@sandia.gov])
+AC_INIT([SST Elements Library],[14.1],[sst@sandia.gov])
 
 AC_PREREQ([2.59])
 AC_COPYRIGHT([Copyright National Technology and Engineering Solutions of Sandia (NTESS), 2004-2024])
@@ -40,6 +40,8 @@ LT_INIT([shared disable-static dlopen])
 LTDL_INIT([recursive])
 
 AC_CACHE_SAVE
+
+SST_CHECK_ARIEL_MPI([], [AC_MSG_ERROR([Can't enable Ariel MPI])])
 
 SST_CORE_CHECK_INSTALL()
 
