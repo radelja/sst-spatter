@@ -18,7 +18,7 @@ sst.setProgramOption("timebase", "1ps")
 # Define the simulation components
 comp_cpu = sst.Component("cpu", "miranda.BaseCPU")
 comp_cpu.addParams({
-    "verbose" : 0,
+    "verbose" : 1,
     "printStats" : 1
 })
 
