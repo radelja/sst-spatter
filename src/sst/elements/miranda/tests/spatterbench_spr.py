@@ -1,6 +1,17 @@
 import sst
 import sys
+import argparse
 from sst import UnitAlgebra
+
+# Parse commandline arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("--statfile", help="statistics file", default="./stats.out")
+parser.add_argument("--statlevel", help="statistics level", type=int, default=16)
+
+args, unknown = parser.parse_known_args()
+
+statFile = args.statfile
+statLevel = args.statlevel
 
 # Define SST core options
 sst.setProgramOption("timebase", "1ps")
@@ -90,6 +101,7 @@ mem_timing_dram_params = {
     }
 
 miranda_params_cpu = {
+    "verbose" : 1,
     "printStats" : 1,
     "clock"     : freq_turbo,
     "max_reqs_cycle" : load_per_cycle + store_per_cycle,
@@ -103,16 +115,14 @@ miranda_params_cpu = {
 cpu = sst.Component("cpu", "miranda.BaseCPU")
 cpu.addParams(miranda_params_cpu)
 
-#gen = comp_cpu.setSubComponent("generator", "miranda.SpatterBenchGenerator")
-#gen.addParams({
-#    "verbose" : 2,
-#    "args" : " ".join(sys.argv[1:])
-#})
-
-gen = cpu.setSubComponent("generator", "miranda.CopyGenerator")
+gen = cpu.setSubComponent("generator", "miranda.SpatterBenchGenerator")
+gen.addParams({
+   "verbose" : 2,
+   "args" : " ".join(unknown)
+})
 
 # Tell SST what statistics handling we want
-sst.setStatisticLoadLevel(4)
+sst.setStatisticLoadLevel(statLevel)
 
 # Enable statistics outputs
 cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
@@ -152,7 +162,7 @@ link_l2_l3.connect(  (l2_cache, "low_network_0", "100ps"),
 link_l3_mem.connect( (l3_cache, "low_network_0", "100ps", ),
                      (memctrl, "direct_link", "100ps") )
 
-sst.setStatisticOutput("sst.statOutputCSV")
+sst.setStatisticOutput("sst.statOutputCSV", {"filepath": statFile})
 
 ################### Sources ###################
 # This config is compiled from various sources including
