@@ -3,33 +3,11 @@
 from sst_unittest import *
 from sst_unittest_support import *
 
-################################################################################
-# Code to support a single instance module initialize, must be called setUp method
-
-module_init = 0
-module_sema = threading.Semaphore()
-
-def initializeTestModule_SingleInstance(class_inst):
-    global module_init
-    global module_sema
-
-    module_sema.acquire()
-    if module_init != 1:
-        try:
-            # Put your single instance Init Code Here
-            pass
-        except:
-            pass
-        module_init = 1
-    module_sema.release()
-
-################################################################################
 
 class testcase_miranda_Component(SSTTestCase):
 
     def setUp(self):
         super(type(self), self).setUp()
-        initializeTestModule_SingleInstance(self)
         # Put test based setup code here. it is called once before every test
 
     def tearDown(self):
@@ -37,7 +15,7 @@ class testcase_miranda_Component(SSTTestCase):
         super(type(self), self).tearDown()
 
 #####
-    Spatter_missing = not sst_elements_config_include_file_get_value_int("HAVE_SPATTER", default=0, disable_warning=True)
+    Spatter_missing = not sst_elements_config_include_file_get_value(define="HAVE_SPATTER", type=int, default=0, disable_warning=True)
 
     @unittest.skipIf(Spatter_missing, "test_miranda_spatterbench test: Requires Spatter, but Spatter is not found in build configuration.")
     def test_miranda_spatterbench_gather(self):
