@@ -59,14 +59,14 @@ for cpu_id in range(num_cpu):
    maxAddr = (memory_capacity_inB // num_cpu)
    addr_a = (cpu_id * int(maxAddr))
 
-   comp_cpu = sst.Component("cpu_%d"%cpu_id, "miranda.BaseCPU")
+   comp_cpu = sst.Component("cpu_%d"%cpu_id, "sstSpatter.BaseCPU")
    comp_cpu.addParams({
          "verbose" : mirandaVerbose,
          "clock"     : core_clock,
          "max_reqs_cycle" : miranda_req_per_cycle,
          "maxmemreqpending" : miranda_oustanding_reqs,
    })
-   gen = comp_cpu.setSubComponent("generator", "miranda.SingleStreamGenerator")
+   gen = comp_cpu.setSubComponent("generator", "sstSpatter.SingleStreamGenerator")
    gen.addParams({
          "verbose" : mirandaVerbose,
          "count" : 200000,

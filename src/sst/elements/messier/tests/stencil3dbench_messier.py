@@ -4,13 +4,13 @@ import sst
 #sst.setProgramOption("timebase", "1ps")
 
 # Define the simulation components
-comp_cpu = sst.Component("cpu", "miranda.BaseCPU")
+comp_cpu = sst.Component("cpu", "sstSpatter.BaseCPU")
 comp_cpu.addParams({
 	"verbose" : 0,
 	"clock" : "2GHz",
 	"printStats" : 1,
 })
-cpugen = comp_cpu.setSubComponent("generator", "miranda.Stencil3DBenchGenerator")
+cpugen = comp_cpu.setSubComponent("generator", "sstSpatter.Stencil3DBenchGenerator")
 cpugen.addParams({
         "verbose" : 0,
         "nx" : 30,

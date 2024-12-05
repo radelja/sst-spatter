@@ -23,7 +23,7 @@ node_group = 2              # Memory Controllers
 
 class CPU():
     def __init__(self, cpu_num):
-        self.comp = sst.Component(f"cpu{cpu_num}", "miranda.BaseCPU")
+        self.comp = sst.Component(f"cpu{cpu_num}", "sstSpatter.BaseCPU")
         self.comp.addParams({
             "verbose" : 0,
             "max_reqs_cycle" : 2,
@@ -33,7 +33,7 @@ class CPU():
             "pagecount" : 1,
             "pagesize" : mem_info['sz']
         })
-        self.gen = self.comp.setSubComponent("generator", "miranda.RandomGenerator")
+        self.gen = self.comp.setSubComponent("generator", "sstSpatter.RandomGenerator")
         self.gen.addParams({
             "verbose" : 0,
             "count"   : 1024,

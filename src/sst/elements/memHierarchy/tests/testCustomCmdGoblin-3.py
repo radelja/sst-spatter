@@ -36,7 +36,7 @@ router.setSubComponent("topology","merlin.singlerouter")
 for next_core_id in range(config.total_cores):
     print ("Configuring core %d..."%next_core_id)
 
-    cpu = sst.Component("cpu%d"%(next_core_id), "miranda.BaseCPU")
+    cpu = sst.Component("cpu%d"%(next_core_id), "sstSpatter.BaseCPU")
     cpu.addParams(config.getCoreConfig(next_core_id))
     iface = cpu.setSubComponent("memory", "memHierarchy.standardInterface")
 

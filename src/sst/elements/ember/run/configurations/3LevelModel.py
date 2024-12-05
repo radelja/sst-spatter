@@ -35,7 +35,7 @@ class BasicDetailedModel(DetailedModel):
         links = []
         for i in range( numThreads ) :
             name = prefix + str(i) + "_"
-            cpu = sst.Component( name + "cpu", "miranda.BaseCPU")
+            cpu = sst.Component( name + "cpu", "sstSpatter.BaseCPU")
             cpu.addParams( cpu_params )
             print "l1"
             l1 = sst.Component( name + "l1cache", "memHierarchy.Cache")
@@ -60,7 +60,7 @@ class BasicDetailedModel(DetailedModel):
         name = prefix + "nic_"
         #print "createNic() ", name
 
-        cpu = sst.Component( name + "cpu", "miranda.BaseCPU")
+        cpu = sst.Component( name + "cpu", "sstSpatter.BaseCPU")
         cpu.addParams( cpu_params )
         print "l1"
         l1 = sst.Component( name + "l1cache", "memHierarchy.Cache")

@@ -18,12 +18,12 @@
 #include <sst/core/subcomponent.h>
 #include <sst/core/link.h>
 
-#include "sst/elements/miranda/mirandaEvent.h"
+#include "sst/elements/sstSpatter/mirandaEvent.h"
 
 #include "singleThread.h"
 
 using namespace SST;
-using namespace SST::Miranda;
+using namespace SST::SST_Spatter;
 using namespace SST::Thornhill;
 
 SingleThread::SingleThread( ComponentId_t id,

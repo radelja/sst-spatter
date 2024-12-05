@@ -40,7 +40,7 @@ class SandyBridgeModel(DetailedModel):
         links = []
         for i in range(len(cpuL1s)):
             name = prefix + str(i)
-            cpu = sst.Component( name , "miranda.BaseCPU")
+            cpu = sst.Component( name , "sstSpatter.BaseCPU")
             cpu.addParams( cpu_params )
 
             link = sst.Link( name + "_l1_link" )
@@ -59,7 +59,7 @@ class SandyBridgeModel(DetailedModel):
         name = prefix + "nic_"
         #print "createNic() ", name
 
-        cpu = sst.Component( name + "cpu", "miranda.BaseCPU")
+        cpu = sst.Component( name + "cpu", "sstSpatter.BaseCPU")
         cpu.addParams( cpu_params )
 
         link = sst.Link( name + "cpu_l1_link")

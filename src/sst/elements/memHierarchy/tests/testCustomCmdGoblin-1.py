@@ -4,14 +4,14 @@ from mhlib import componentlist
 debug = 0
 
 # Define the simulation components
-comp_cpu = sst.Component("core", "miranda.BaseCPU")
+comp_cpu = sst.Component("core", "sstSpatter.BaseCPU")
 comp_cpu.addParams({
 	"verbose" : 0,
 	"printStats" : 1,
 })
 
 iface = comp_cpu.setSubComponent("memory", "memHierarchy.standardInterface")
-gen = comp_cpu.setSubComponent("generator", "miranda.STREAMBenchGeneratorCustomCmd")
+gen = comp_cpu.setSubComponent("generator", "sstSpatter.STREAMBenchGeneratorCustomCmd")
 gen.addParams({
 	"verbose" : 0,
         "n" : 10000,

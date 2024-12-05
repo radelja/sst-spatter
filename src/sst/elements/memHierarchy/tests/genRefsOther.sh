@@ -10,14 +10,14 @@ wait
 
 # Miranda
 echo "Miranda..."
-sst ../../miranda/tests/copybench.py > ../../miranda/tests/refFiles/test_miranda_copybench.out &
-sst ../../miranda/tests/streambench.py > ../../miranda/tests/refFiles/test_miranda_streambench.out &
-sst ../../miranda/tests/gupsgen.py > ../../miranda/tests/refFiles/test_miranda_gupsgen.out &
-sst ../../miranda/tests/inorderstream.py > ../../miranda/tests/refFiles/test_miranda_inorderstream.out &
-sst ../../miranda/tests/randomgen.py > ../../miranda/tests/refFiles/test_miranda_randomgen.out &
-sst ../../miranda/tests/revsinglestream.py > ../../miranda/tests/refFiles/test_miranda_revsinglestream.out &
-sst ../../miranda/tests/singlestream.py > ../../miranda/tests/refFiles/test_miranda_singlestream.out &
-sst ../../miranda/tests/stencil3dbench.py > ../../miranda/tests/refFiles/test_miranda_stencil3dbench.out &
+sst ../../sstSpatter/tests/copybench.py > ../../sstSpatter/tests/refFiles/test_miranda_copybench.out &
+sst ../../sstSpatter/tests/streambench.py > ../../sstSpatter/tests/refFiles/test_miranda_streambench.out &
+sst ../../sstSpatter/tests/gupsgen.py > ../../sstSpatter/tests/refFiles/test_miranda_gupsgen.out &
+sst ../../sstSpatter/tests/inorderstream.py > ../../sstSpatter/tests/refFiles/test_miranda_inorderstream.out &
+sst ../../sstSpatter/tests/randomgen.py > ../../sstSpatter/tests/refFiles/test_miranda_randomgen.out &
+sst ../../sstSpatter/tests/revsinglestream.py > ../../sstSpatter/tests/refFiles/test_miranda_revsinglestream.out &
+sst ../../sstSpatter/tests/singlestream.py > ../../sstSpatter/tests/refFiles/test_miranda_singlestream.out &
+sst ../../sstSpatter/tests/stencil3dbench.py > ../../sstSpatter/tests/refFiles/test_miranda_stencil3dbench.out &
 wait
 
 # Ariel

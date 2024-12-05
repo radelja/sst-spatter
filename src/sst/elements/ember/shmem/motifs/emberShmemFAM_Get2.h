@@ -210,7 +210,7 @@ public:
 
         std::stringstream tmp;
 
-        motif = "miranda.STREAMBenchGenerator";
+        motif = "sstSpatter.STREAMBenchGenerator";
 
         tmp.str( std::string() ); tmp.clear();
         tmp << m_stream_n;

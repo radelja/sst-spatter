@@ -388,9 +388,9 @@ class TileBuilder:
             (tileLeftL1, "low_network_0", mesh_link_latency))
         leftL1L2link.setNoCut()
 
-        leftCore = sst.Component("core_" + str(self.next_core_id), "miranda.BaseCPU")
+        leftCore = sst.Component("core_" + str(self.next_core_id), "sstSpatter.BaseCPU")
         leftCore.addParams(core_params)
-        leftGen = leftCore.setSubComponent("generator", "miranda.STREAMBenchGenerator")
+        leftGen = leftCore.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
         leftGen.addParams(gen_params)
         leftGen.addParams({
             "start_a" : self.base_a + self.next_core_id * thread_iters * 8,
@@ -407,9 +407,9 @@ class TileBuilder:
         tileRightL1 = sst.Component("l1cache_" + str(self.next_core_id), "memHierarchy.Cache")
         tileRightL1.addParams(l1_cache_params)
         
-        rightCore = sst.Component("core_" + str(self.next_core_id), "miranda.BaseCPU")
+        rightCore = sst.Component("core_" + str(self.next_core_id), "sstSpatter.BaseCPU")
         rightCore.addParams(core_params)
-        rightGen = rightCore.setSubComponent("generator", "miranda.STREAMBenchGenerator")
+        rightGen = rightCore.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
         rightGen.addParams(gen_params)
         rightGen.addParams({
             "start_a" : self.base_a + self.next_core_id * thread_iters * 8,

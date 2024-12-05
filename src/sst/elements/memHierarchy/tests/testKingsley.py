@@ -330,12 +330,12 @@ class TileBuilder:
             })
 
         # Left Core
-        mirandaL0 = sst.Component("thread_" + str(self.next_core_id), "miranda.BaseCPU")
-        mirandaL1 = sst.Component("thread_" + str(self.next_core_id + 18), "miranda.BaseCPU")
+        mirandaL0 = sst.Component("thread_" + str(self.next_core_id), "sstSpatter.BaseCPU")
+        mirandaL1 = sst.Component("thread_" + str(self.next_core_id + 18), "sstSpatter.BaseCPU")
         mirandaL0.addParams(cpu_params)
         mirandaL1.addParams(cpu_params)
-        genL0 = mirandaL0.setSubComponent("generator", "miranda.STREAMBenchGenerator")
-        genL1 = mirandaL1.setSubComponent("generator", "miranda.STREAMBenchGenerator")
+        genL0 = mirandaL0.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
+        genL1 = mirandaL1.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
         genL0.addParams(gen_params)
         genL1.addParams(gen_params)
 
@@ -387,12 +387,12 @@ class TileBuilder:
             })
 
         # Right Core
-        mirandaR0 = sst.Component("thread_" + str(self.next_core_id), "miranda.BaseCPU")
-        mirandaR1 = sst.Component("thread_" + str(self.next_core_id + 18), "miranda.BaseCPU")
+        mirandaR0 = sst.Component("thread_" + str(self.next_core_id), "sstSpatter.BaseCPU")
+        mirandaR1 = sst.Component("thread_" + str(self.next_core_id + 18), "sstSpatter.BaseCPU")
         mirandaR0.addParams(cpu_params)
         mirandaR1.addParams(cpu_params)
-        genR0 = mirandaR0.setSubComponent("generator", "miranda.STREAMBenchGenerator")
-        genR1 = mirandaR1.setSubComponent("generator", "miranda.STREAMBenchGenerator")
+        genR0 = mirandaR0.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
+        genR1 = mirandaR1.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
         
         genR0.addParams(gen_params)
         genR1.addParams(gen_params)

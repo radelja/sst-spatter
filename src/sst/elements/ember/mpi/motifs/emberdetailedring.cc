@@ -156,7 +156,7 @@ void EmberDetailedRingGenerator::computeDetailed( std::queue<EmberEvent*>& evQ)
 
 	std::stringstream tmp;
 
-    motif = "miranda.STREAMBenchGenerator";
+    motif = "sstSpatter.STREAMBenchGenerator";
 
 	tmp.str( std::string() ); tmp.clear();
 	tmp << m_stream_n;

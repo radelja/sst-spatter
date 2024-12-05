@@ -98,7 +98,7 @@ void EmberDetailedStreamGenerator::computeDetailedCopy( std::queue<EmberEvent*>&
 
 	std::stringstream tmp;
 
-    motif = "miranda.CopyGenerator";
+    motif = "sstSpatter.CopyGenerator";
 
 	tmp.str( std::string() ); tmp.clear();
 	tmp << m_stream_n/(m_operandwidth/8);
@@ -131,7 +131,7 @@ void EmberDetailedStreamGenerator::computeDetailedTriad( std::queue<EmberEvent*>
 
 	std::stringstream tmp;
 
-    motif = "miranda.STREAMBenchGenerator";
+    motif = "sstSpatter.STREAMBenchGenerator";
 
 	tmp.str( std::string() ); tmp.clear();
 	tmp << m_stream_n/(m_operandwidth/8);

@@ -9,8 +9,8 @@ sst.setStatisticLoadLevel(4)
 memory_mb = 1024
 
 # Define the simulation components
-comp_cpu0 = sst.Component("cpu0", "miranda.BaseCPU")
-gen_cpu0 = comp_cpu0.setSubComponent("generator", "miranda.GUPSGenerator")
+comp_cpu0 = sst.Component("cpu0", "sstSpatter.BaseCPU")
+gen_cpu0 = comp_cpu0.setSubComponent("generator", "sstSpatter.GUPSGenerator")
 gen_cpu0.addParams({
 	"verbose" : 0,
 	"count" : 100000,
@@ -19,8 +19,8 @@ gen_cpu0.addParams({
 	"max_address" : ((memory_mb) // 2) * 1024 * 1024,
 })
 
-comp_cpu1 = sst.Component("cpu1", "miranda.BaseCPU")
-gen_cpu1 = comp_cpu1.setSubComponent("generator", "miranda.GUPSGenerator")
+comp_cpu1 = sst.Component("cpu1", "sstSpatter.BaseCPU")
+gen_cpu1 = comp_cpu1.setSubComponent("generator", "sstSpatter.GUPSGenerator")
 gen_cpu1.addParams({
 	"verbose" : 0,
 	"count" : 100000,

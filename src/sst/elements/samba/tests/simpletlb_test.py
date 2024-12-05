@@ -11,11 +11,11 @@ MB=1024 * KB
 GB=1024 * MB
 
 # Define the simulation components
-comp_cpu = sst.Component("cpu", "miranda.BaseCPU")
+comp_cpu = sst.Component("cpu", "sstSpatter.BaseCPU")
 comp_cpu.addParams({
 	"verbose" : 1,
 })
-cpugen = comp_cpu.setSubComponent("generator", "miranda.GUPSGenerator")
+cpugen = comp_cpu.setSubComponent("generator", "sstSpatter.GUPSGenerator")
 cpugen.addParams({
 	"verbose" : 0,
 	"count" : 10000,

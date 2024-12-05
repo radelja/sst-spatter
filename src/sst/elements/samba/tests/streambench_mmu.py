@@ -7,13 +7,13 @@ sst.setProgramOption("timebase", "1ps")
 sst.setStatisticLoadLevel(4)
 
 # Define the simulation components
-comp_cpu = sst.Component("cpu", "miranda.BaseCPU")
+comp_cpu = sst.Component("cpu", "sstSpatter.BaseCPU")
 comp_cpu.addParams({
 	"verbose" : 0,
 	"clock" : "2.4GHz",
 	"printStats" : 1,
 })
-cpugen = comp_cpu.setSubComponent("generator", "miranda.STREAMBenchGenerator")
+cpugen = comp_cpu.setSubComponent("generator", "sstSpatter.STREAMBenchGenerator")
 cpugen.addParams({
         "verbose" : 0,
         "n" : 10000,

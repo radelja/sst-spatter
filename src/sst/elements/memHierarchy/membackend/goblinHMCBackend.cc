@@ -17,7 +17,7 @@
 #include <sst_config.h>
 #include <membackend/goblinHMCBackend.h>
 
-#include "sst/elements/miranda/generators/customcmd_opcode.h"
+#include "sst/elements/sstSpatter/generators/customcmd_opcode.h"
 
 using namespace SST::MemHierarchy;
 
@@ -761,7 +761,7 @@ bool GOBLINHMCSimBackend::issueMappedRequest(ReqId reqId, Addr addr, bool isWrit
 
 bool GOBLINHMCSimBackend::issueCustomRequest(ReqId reqId, Interfaces::StandardMem::CustomData* data) { 
     
-    Miranda::OpCodeStdMem* opcode_data = static_cast<Miranda::OpCodeStdMem*>(data);
+    SST_Spatter::OpCodeStdMem* opcode_data = static_cast<SST_Spatter::OpCodeStdMem*>(data);
     Addr addr = opcode_data->getAddr();
     uint32_t cmd = opcode_data->getOpCode();
     unsigned numBytes = static_cast<unsigned>(opcode_data->getBytes());

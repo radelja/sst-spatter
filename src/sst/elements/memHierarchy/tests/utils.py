@@ -38,13 +38,13 @@ class Config:
 
         self.app = cp.get('CPU', 'application')
         self.coreConfigParams = dict(cp.items(self.app))
-        if self.app == 'miranda.STREAMBenchGeneratorCustomCmd':
+        if self.app == 'sstSpatter.STREAMBenchGeneratorCustomCmd':
             self.coreConfig = self._streamCoreConfig
-        elif self.app == 'miranda.SPMVGenerator':
+        elif self.app == 'sstSpatter.SPMVGenerator':
             self.coreConfig = self._SPMVCoreConfig
-        elif self.app == 'miranda.RandomGenerator':
+        elif self.app == 'sstSpatter.RandomGenerator':
             self.coreConfig = self._randomCoreConfig
-        elif self.app == 'miranda.GUPSGenerator':
+        elif self.app == 'sstSpatter.GUPSGenerator':
             self.coreConfig = self._GUPSCoreConfig
         else:
             raise Exception("Unknown application '%s'"%app)
@@ -61,7 +61,7 @@ class Config:
         streamN = int(self.coreConfigParams['total_streamn'])
         params = dict()
         params['max_reqs_cycle'] =  self.max_reqs_cycle
-        params['generator'] = 'miranda.STREAMBenchGeneratorCustomCmd'
+        params['generator'] = 'sstSpatter.STREAMBenchGeneratorCustomCmd'
         params['generatorParams.n'] = streamN // self.total_cores
         params['generatorParams.start_a'] = ( (streamN * 32) // self.total_cores ) * core_id
         params['generatorParams.start_b'] = ( (streamN * 32) // self.total_cores ) * core_id + (streamN * 32)
@@ -75,7 +75,7 @@ class Config:
         streamN = int(self.coreConfigParams['total_streamn'])
         params = dict()
         # params['max_reqs_cycle'] =  self.max_reqs_cycle
-        params['generator'] = 'miranda.GUPSGenerator'
+        params['generator'] = 'sstSpatter.GUPSGenerator'
         params['generatorParams.count'] = streamN // self.total_cores
         params['generatorParams.seed_a'] = 11
         params['generatorParams.seed_b'] = 31
@@ -89,7 +89,7 @@ class Config:
         streamN = int(self.coreConfigParams['total_streamn'])
         params = dict()
         # params['max_reqs_cycle'] =  self.max_reqs_cycle
-        params['generator'] = 'miranda.RandomGenerator'
+        params['generator'] = 'sstSpatter.RandomGenerator'
         params['generatorParams.count'] = streamN // self.total_cores
         params['generatorParams.max_address'] = 16384
         params['generatorParams.issue_op_fences'] = "no"
@@ -102,7 +102,7 @@ class Config:
         streamN = int(self.coreConfigParams['total_streamn'])
         params = dict()
         params['generatorParams.verbose'] = int(self.verbose)
-        params['generator'] = 'miranda.SPMVGenerator'
+        params['generator'] = 'sstSpatter.SPMVGenerator'
         params['generatorParams.matrixnx'] = 10
         params['generatorParams.matrixny'] = 10
         params['generatorParams.element_width'] = 32

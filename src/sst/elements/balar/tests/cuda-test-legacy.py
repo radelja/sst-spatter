@@ -83,7 +83,7 @@ for next_core_id in range(config.cpu_cores):
     print ("Configuring CPU core %d..."%next_core_id)
 
     if 'miranda' in config.app:
-        cpu = sst.Component("cpu%d"%(next_core_id), "miranda.BaseCPU")
+        cpu = sst.Component("cpu%d"%(next_core_id), "sstSpatter.BaseCPU")
         cpu.addParams(config.getCoreConfig(next_core_id))
         cpuPort = "cache_link"
     elif 'ariel' in config.app:

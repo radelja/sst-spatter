@@ -81,20 +81,20 @@ sst.enableStatisticForComponentType("memHierarchy.ShmemNic",'hostToNicLatency', 
 #sst.enableStatisticForComponentType("memHierarchy.DirectoryController",'directory_cache_hits', {"type":"sst.AccumulatorStatistic","rate":"0ns"})
 #sst.enableStatisticForComponentType("memHierarchy.DirectoryController",'mshr_hits', {"type":"sst.AccumulatorStatistic","rate":"0ns"})
 
-#sst.enableStatisticForComponentType("miranda.shmemGUPS",'loopLatency', #{"type":"sst.AccumulatorStatistic","rate":"0ns"})
+#sst.enableStatisticForComponentType("sstSpatter.shmemGUPS",'loopLatency', #{"type":"sst.AccumulatorStatistic","rate":"0ns"})
 #{"type":"sst.HistogramStatistic",
 #"rate":"0ns",
 #"binwidth":"10",
 #"numbins":"100"}
 #)
-#sst.enableStatisticForComponentType("miranda.shmemGUPS",'readLatency', #{"type":"sst.AccumulatorStatistic","rate":"0ns"})
+#sst.enableStatisticForComponentType("sstSpatter.shmemGUPS",'readLatency', #{"type":"sst.AccumulatorStatistic","rate":"0ns"})
 #{"type":"sst.HistogramStatistic",
 #"rate":"0ns",
 #"binwidth":"10",
 #"numbins":"100"}
 #)
 
-#sst.enableStatisticForComponentType("miranda.shmemGUPS",'fenceLatency',#{"type":"sst.AccumulatorStatistic","rate":"0ns"})
+#sst.enableStatisticForComponentType("sstSpatter.shmemGUPS",'fenceLatency',#{"type":"sst.AccumulatorStatistic","rate":"0ns"})
 #{"type":"sst.HistogramStatistic",
 #"rate":"0ns",
 #"binwidth":"10",
@@ -140,7 +140,7 @@ sst.enableStatisticForComponentType("memHierarchy.ShmemNic",'hostToNicLatency', 
 #"numbins":36*4}
 #)
 
-#sst.enableStatisticForComponentType("miranda.shmemGUPS",'addrIncOp',
+#sst.enableStatisticForComponentType("sstSpatter.shmemGUPS",'addrIncOp',
 #{"type":"sst.HistogramStatistic",
 #"rate":"0ns",
 #"binwidth":32768,

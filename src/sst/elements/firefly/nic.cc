@@ -710,7 +710,7 @@ void Nic::detailedMemOp( Thornhill::DetailedCompute* detailed,
         params.insert( "verbose", "5" );
         #endif
 
-        gens.push_back( std::make_pair( "miranda.SingleStreamGenerator", params ) );
+        gens.push_back( std::make_pair( "sstSpatter.SingleStreamGenerator", params ) );
     }
 
     if ( gens.empty() ) {

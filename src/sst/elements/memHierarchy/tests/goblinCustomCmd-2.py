@@ -1,10 +1,10 @@
 import sst
 
 # Define the simulation components
-comp_cpu = sst.Component("core", "miranda.BaseCPU")
+comp_cpu = sst.Component("core", "sstSpatter.BaseCPU")
 comp_cpu.addParams({
 	"verbose" : 0,
-	"generator" : "miranda.STREAMBenchGeneratorCustomCmd",
+	"generator" : "sstSpatter.STREAMBenchGeneratorCustomCmd",
 	"generatorParams.verbose" : 0,
 	"generatorParams.startat" : 3,
 	"generatorParams.count" : 500000,

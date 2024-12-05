@@ -220,7 +220,7 @@ public:
 
        	std::stringstream tmp;
 
-   		motif = "miranda.GUPSGenerator";
+   		motif = "sstSpatter.GUPSGenerator";
 
        	tmp.str( std::string() ); tmp.clear();
        	tmp << m_updates;
