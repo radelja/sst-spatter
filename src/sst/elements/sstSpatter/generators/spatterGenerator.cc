@@ -14,19 +14,19 @@
 // distribution.
 
 #include <sst_config.h>
-#include <sst/elements/sstSpatter/generators/spatterbench.h>
+#include <sst/elements/sstSpatter/generators/spatterGenerator.h>
 
 #include <sst/core/params.h>
 
 using namespace SST::SST_Spatter;
 
 
-SpatterBenchGenerator::SpatterBenchGenerator(ComponentId_t id, Params& params) : RequestGenerator(id, params)
+SpatterGenerator::SpatterGenerator(ComponentId_t id, Params& params) : RequestGenerator(id, params)
 {
     build(params);
 }
 
-void SpatterBenchGenerator::build(Params& params)
+void SpatterGenerator::build(Params& params)
 {
     const uint32_t verbose = params.find<uint32_t>("verbose", 0);
     const std::string args = "./Spatter " + params.find<std::string>("args", "");
@@ -35,7 +35,7 @@ void SpatterBenchGenerator::build(Params& params)
     int argc = 0;
     int res  = 0;
 
-    out = new Output("SpatterBenchGenerator[@p:@l]: ", verbose, 0, Output::STDOUT);
+    out = new Output("SpatterGenerator[@p:@l]: ", verbose, 0, Output::STDOUT);
 
     datawidth  = params.find<uint32_t>("datawidth", 8);
 
@@ -118,12 +118,12 @@ void SpatterBenchGenerator::build(Params& params)
     }
 }
 
-SpatterBenchGenerator::~SpatterBenchGenerator()
+SpatterGenerator::~SpatterGenerator()
 {
     delete out;
 }
 
-void SpatterBenchGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
+void SpatterGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
 {
     if (!configFin) {
         const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
@@ -147,7 +147,7 @@ void SpatterBenchGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
     }
 }
 
-bool SpatterBenchGenerator::isFinished()
+bool SpatterGenerator::isFinished()
 {
     if (configFin) {
         const Spatter::ConfigurationBase *prevConfig = cl.configs[configIdx-1].get();
@@ -171,7 +171,7 @@ bool SpatterBenchGenerator::isFinished()
     return (configIdx == cl.configs.size());
 }
 
-void SpatterBenchGenerator::completed()
+void SpatterGenerator::completed()
 {
 }
 
@@ -181,7 +181,7 @@ void SpatterBenchGenerator::completed()
    * @param args The string of arguments to be counted.
    * @param argc Number of arguments found in the string.
    */
-void SpatterBenchGenerator::countArgs(const std::string &args, int32_t &argc)
+void SpatterGenerator::countArgs(const std::string &args, int32_t &argc)
 {
     std::istringstream iss(args);
     std::string tok;
@@ -199,7 +199,7 @@ void SpatterBenchGenerator::countArgs(const std::string &args, int32_t &argc)
    * @param argc Number of arguments in the string.
    * @param argv Destination array for the arguments.
    */
-void SpatterBenchGenerator::tokenizeArgs(const std::string &args, const int32_t &argc, char ***argv)
+void SpatterGenerator::tokenizeArgs(const std::string &args, const int32_t &argc, char ***argv)
 {
     std::istringstream iss(args);
     std::string tok;
@@ -225,7 +225,7 @@ void SpatterBenchGenerator::tokenizeArgs(const std::string &args, const int32_t 
    *
    * @param stat Statistic whose flags will be set.
    */
-void SpatterBenchGenerator::setStatFlags(Statistic<uint64_t>* stat)
+void SpatterGenerator::setStatFlags(Statistic<uint64_t>* stat)
 {
     stat->setFlagClearDataOnOutput(true);
     stat->setFlagOutputAtEndOfSim(false);
@@ -237,7 +237,7 @@ void SpatterBenchGenerator::setStatFlags(Statistic<uint64_t>* stat)
    * @param config Run-configuration used to determine the kernel type.
    * @return Number of elements in the pattern.
    */
-size_t SpatterBenchGenerator::getPatternSize(const Spatter::ConfigurationBase *config)
+size_t SpatterGenerator::getPatternSize(const Spatter::ConfigurationBase *config)
 {
     size_t patternSize = 0;
 
@@ -258,7 +258,7 @@ size_t SpatterBenchGenerator::getPatternSize(const Spatter::ConfigurationBase *c
    * @brief Update the pattern, count, and config indices.
    *
    */
-void SpatterBenchGenerator::updateIndices()
+void SpatterGenerator::updateIndices()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
     size_t patternSize = getPatternSize(config);
@@ -283,7 +283,7 @@ void SpatterBenchGenerator::updateIndices()
    * @brief Generate a memory request for a Gather pattern.
    *
    */
-void SpatterBenchGenerator::gather()
+void SpatterGenerator::gather()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
 
@@ -298,7 +298,7 @@ void SpatterBenchGenerator::gather()
    * @brief Generate a memory request for a Scatter pattern.
    *
    */
-void SpatterBenchGenerator::scatter()
+void SpatterGenerator::scatter()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
 
@@ -313,7 +313,7 @@ void SpatterBenchGenerator::scatter()
    * @brief Generate memory requests for a GS pattern.
    *
    */
-void SpatterBenchGenerator::gatherScatter()
+void SpatterGenerator::gatherScatter()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
 
@@ -339,7 +339,7 @@ void SpatterBenchGenerator::gatherScatter()
    * @brief Generate a memory request for a MultiGather pattern.
    *
    */
-void SpatterBenchGenerator::multiGather()
+void SpatterGenerator::multiGather()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
 
@@ -354,7 +354,7 @@ void SpatterBenchGenerator::multiGather()
    * @brief Generate a memory request for a MultiScatter pattern.
    *
    */
-void SpatterBenchGenerator::multiScatter()
+void SpatterGenerator::multiScatter()
 {
     const Spatter::ConfigurationBase *config = cl.configs[configIdx].get();
 

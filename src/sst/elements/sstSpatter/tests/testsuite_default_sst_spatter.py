@@ -17,35 +17,35 @@ class testcase_miranda_Component(SSTTestCase):
 #####
     Spatter_missing = not sst_elements_config_include_file_get_value(define="HAVE_SPATTER", type=int, default=0, disable_warning=True)
 
-    @unittest.skipIf(Spatter_missing, "test_miranda_spatterbench test: Requires Spatter, but Spatter is not found in build configuration.")
-    def test_miranda_spatterbench_gather(self):
-        stat_file = "test_miranda_spatterbench_gather_stats.csv"
+    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
+    def test_sst_spatter_gather(self):
+        stat_file = "test_sst_spatter_gather_stats.csv"
         model_options = "-pUNIFORM:8:1 -kgather -l" + str(2**16) + " --statfile={0}".format(stat_file)
-        self.miranda_test_template("spatterbench_gather", "spatterbench.py", "--model-options=\"{0}\"".format(model_options))
+        self.miranda_test_template("gather", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_miranda_spatterbench test: Requires Spatter, but Spatter is not found in build configuration.")
-    def test_miranda_spatterbench_scatter(self):
-        stat_file = "test_miranda_spatterbench_scatter_stats.csv"
+    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
+    def test_sst_spatter_scatter(self):
+        stat_file = "test_sst_spatter_scatter_stats.csv"
         model_options = "-pUNIFORM:8:1 -kscatter -l" + str(2**16) + " --statfile={0}".format(stat_file)
-        self.miranda_test_template("spatterbench_scatter", "spatterbench.py", "--model-options=\"{0}\"".format(model_options))
+        self.miranda_test_template("scatter", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_miranda_spatterbench test: Requires Spatter, but Spatter is not found in build configuration.")
-    def test_miranda_spatterbench_gs(self):
-        stat_file = "test_miranda_spatterbench_gs_stats.csv"
+    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
+    def test_sst_spatter_gs(self):
+        stat_file = "test_sst_spatter_gs_stats.csv"
         model_options = "-gUNIFORM:8:1 -uUNIFORM:8:1 -kgs -l" + str(2**16) + " --statfile={0}".format(stat_file)
-        self.miranda_test_template("spatterbench_gs", "spatterbench.py", "--model-options=\"{0}\"".format(model_options))
+        self.miranda_test_template("gs", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_miranda_spatterbench test: Requires Spatter, but Spatter is not found in build configuration.")
-    def test_miranda_spatterbench_multiscatter(self):
-        stat_file = "test_miranda_spatterbench_multiscatter_stats.csv"
+    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
+    def test_sst_spatter_multiscatter(self):
+        stat_file = "test_sst_spatter_multiscatter_stats.csv"
         model_options = "-pUNIFORM:8:1 -uUNIFORM:8:1 -kmultiscatter -l" + str(2**16) + " --statfile={0}".format(stat_file)
-        self.miranda_test_template("spatterbench_multiscatter", "spatterbench.py", "--model-options=\"{0}\"".format(model_options))
+        self.miranda_test_template("multiscatter", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_miranda_spatterbench test: Requires Spatter, but Spatter is not found in build configuration.")
-    def test_miranda_spatterbench_multigather(self):
-        stat_file = "test_miranda_spatterbench_multigather_stats.csv"
+    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
+    def test_sst_spatter_multigather(self):
+        stat_file = "test_sst_spatter_multigather_stats.csv"
         model_options = "-pUNIFORM:8:1 -gUNIFORM:8:1 -kmultigather -l" + str(2**16) + " --statfile={0}".format(stat_file)
-        self.miranda_test_template("spatterbench_multigather", "spatterbench.py", "--model-options=\"{0}\"".format(model_options))
+        self.miranda_test_template("multigather", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
 #####
 
@@ -56,7 +56,7 @@ class testcase_miranda_Component(SSTTestCase):
         tmpdir = self.get_test_output_tmp_dir()
 
         # Set the various file paths
-        testDataFileName="test_miranda_{0}".format(testcase)
+        testDataFileName="test_sst_spatter_{0}".format(testcase)
 
         sdlfile = "{0}/{1}".format(test_path, sdlfile)
         reffile = "{0}/refFiles/{1}.out".format(test_path, testDataFileName)

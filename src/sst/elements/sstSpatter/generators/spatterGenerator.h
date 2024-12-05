@@ -14,8 +14,8 @@
 // distribution.
 
 
-#ifndef _H_SST_MIRANDA_SPATTER_BENCH_GEN
-#define _H_SST_MIRANDA_SPATTER_BENCH_GEN
+#ifndef _H_SST_SPATTER_GEN
+#define _H_SST_SPATTER_GEN
 
 #include <sst/elements/sstSpatter/mirandaGenerator.h>
 #include <sst/core/output.h>
@@ -27,20 +27,20 @@
 namespace SST {
 namespace SST_Spatter {
 
-class SpatterBenchGenerator : public RequestGenerator {
+class SpatterGenerator : public RequestGenerator {
 
 public:
-    SpatterBenchGenerator( ComponentId_t id, Params& params );
+    SpatterGenerator( ComponentId_t id, Params& params );
     void build(Params& params);
-    ~SpatterBenchGenerator();
+    ~SpatterGenerator();
     void generate(MirandaRequestQueue<GeneratorRequest*>* q);
     bool isFinished();
     void completed();
 
     SST_ELI_REGISTER_SUBCOMPONENT(
-        SpatterBenchGenerator,
+        SpatterGenerator,
         "sstSpatter",
-        "SpatterBenchGenerator",
+        "SpatterGenerator",
         SST_ELI_ELEMENT_VERSION(1,0,0),
         "Creates a stream of gather/scatter operations based on a Spatter pattern",
         SST::SST_Spatter::RequestGenerator

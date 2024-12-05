@@ -115,7 +115,7 @@ miranda_params_cpu = {
 cpu = sst.Component("cpu", "sstSpatter.BaseCPU")
 cpu.addParams(miranda_params_cpu)
 
-gen = cpu.setSubComponent("generator", "sstSpatter.SpatterBenchGenerator")
+gen = cpu.setSubComponent("generator", "sstSpatter.SpatterGenerator")
 gen.addParams({
    "verbose" : 2,
    "args" : " ".join(unknown)

@@ -68,11 +68,11 @@ endif
 
 if USE_SPATTER
 libsstSpatter_la_SOURCES += \
-	generators/spatterbench.h \
-	generators/spatterbench.cc
+	generators/spatterGenerator.h \
+	generators/spatterGenerator.cc
 EXTRA_DIST += \
-	tests/testsuite_default_miranda_spatterbench.py \
-	tests/spatterbench.py \
+	tests/testsuite_default_sst_spatter.py \
+	tests/sst_spatter.py \
 	tests/refFiles/test_miranda_gather.out \
 	tests/refFiles/test_miranda_gather_stats.csv \
 	tests/refFiles/test_miranda_gs.out \

@@ -22,7 +22,7 @@ comp_cpu.addParams({
     "printStats" : 1
 })
 
-gen = comp_cpu.setSubComponent("generator", "sstSpatter.SpatterBenchGenerator")
+gen = comp_cpu.setSubComponent("generator", "sstSpatter.SpatterGenerator")
 gen.addParams({
     "verbose" : 2,
     "args" : " ".join(unknown)
