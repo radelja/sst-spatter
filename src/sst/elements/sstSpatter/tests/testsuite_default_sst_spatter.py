@@ -15,33 +15,27 @@ class testcase_miranda_Component(SSTTestCase):
         super(type(self), self).tearDown()
 
 #####
-    Spatter_missing = not sst_elements_config_include_file_get_value(define="HAVE_SPATTER", type=int, default=0, disable_warning=True)
 
-    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
     def test_sst_spatter_gather(self):
         stat_file = "test_sst_spatter_gather_stats.csv"
         model_options = "-pUNIFORM:8:1 -kgather -l" + str(2**16) + " --statfile={0}".format(stat_file)
         self.miranda_test_template("gather", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
     def test_sst_spatter_scatter(self):
         stat_file = "test_sst_spatter_scatter_stats.csv"
         model_options = "-pUNIFORM:8:1 -kscatter -l" + str(2**16) + " --statfile={0}".format(stat_file)
         self.miranda_test_template("scatter", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
     def test_sst_spatter_gs(self):
         stat_file = "test_sst_spatter_gs_stats.csv"
         model_options = "-gUNIFORM:8:1 -uUNIFORM:8:1 -kgs -l" + str(2**16) + " --statfile={0}".format(stat_file)
         self.miranda_test_template("gs", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
     def test_sst_spatter_multiscatter(self):
         stat_file = "test_sst_spatter_multiscatter_stats.csv"
         model_options = "-pUNIFORM:8:1 -uUNIFORM:8:1 -kmultiscatter -l" + str(2**16) + " --statfile={0}".format(stat_file)
         self.miranda_test_template("multiscatter", "sst_spatter.py", "--model-options=\"{0}\"".format(model_options))
 
-    @unittest.skipIf(Spatter_missing, "test_sst_spatter test: Requires Spatter, but Spatter is not found in build configuration.")
     def test_sst_spatter_multigather(self):
         stat_file = "test_sst_spatter_multigather_stats.csv"
         model_options = "-pUNIFORM:8:1 -gUNIFORM:8:1 -kmultigather -l" + str(2**16) + " --statfile={0}".format(stat_file)

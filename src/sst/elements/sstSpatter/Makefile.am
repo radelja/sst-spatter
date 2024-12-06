@@ -3,7 +3,7 @@
 #
 
 AM_CPPFLAGS += \
-	$(MPI_CPPFLAGS) \
+	$(SPATTER_CPPFLAGS) \
 	-I$(top_srcdir)/src
 
 compdir = $(pkglibdir)
@@ -34,7 +34,9 @@ libsstSpatter_la_SOURCES = \
 	generators/copygen.h \
 	generators/customcmd_opcode.h \
 	generators/streambench_customcmd.h \
-	generators/streambench_customcmd.cc
+	generators/streambench_customcmd.cc \
+	generators/spatterGenerator.h \
+	generators/spatterGenerator.cc
 
 EXTRA_DIST = \
 	tests/testsuite_default_miranda.py \
@@ -54,23 +56,7 @@ EXTRA_DIST = \
 	tests/refFiles/test_miranda_singlestream.out \
 	tests/refFiles/test_miranda_spmvgen.out \
 	tests/refFiles/test_miranda_stencil3dbench.out \
-	tests/refFiles/test_miranda_streambench.out
-
-libsstSpatter_la_LDFLAGS = -module -avoid-version
-
-if USE_STAKE
-libsstSpatter_la_SOURCES += \
-	generators/stake.cc \
-	generators/stake.h
-libsstSpatter_la_LDFLAGS += $(STAKE_LDFLAGS) $(STAKE_LIB)
-AM_CPPFLAGS += $(STAKE_CPPFLAGS) -DHAVE_STAKE
-endif
-
-if USE_SPATTER
-libsstSpatter_la_SOURCES += \
-	generators/spatterGenerator.h \
-	generators/spatterGenerator.cc
-EXTRA_DIST += \
+	tests/refFiles/test_miranda_streambench.out \
 	tests/testsuite_default_sst_spatter.py \
 	tests/sst_spatter.py \
 	tests/refFiles/test_miranda_gather.out \
@@ -83,10 +69,19 @@ EXTRA_DIST += \
 	tests/refFiles/test_miranda_multiscatter_stats.csv \
 	tests/refFiles/test_miranda_scatter.out \
 	tests/refFiles/test_miranda_scatter_stats.csv
-libsstSpatter_la_LDFLAGS += $(SPATTER_LDFLAGS) $(SPATTER_LIB) -Wl,-R$(SPATTER_LIBDIR)
-AM_CPPFLAGS += $(SPATTER_CPPFLAGS) -DHAVE_SPATTER
+
+libsstSpatter_la_LDFLAGS = \
+	-module -avoid-version \
+	$(SPATTER_LDFLAGS) $(SPATTER_LIB) -Wl,-R$(SPATTER_LIBDIR)
+
+if USE_STAKE
+libsstSpatter_la_SOURCES += \
+	generators/stake.cc \
+	generators/stake.h
+libsstSpatter_la_LDFLAGS += $(STAKE_LDFLAGS) $(STAKE_LIB)
+AM_CPPFLAGS += $(STAKE_CPPFLAGS) -DHAVE_STAKE
 endif
 
 install-exec-hook:
-	$(SST_REGISTER_TOOL) SST_ELEMENT_SOURCE     miranda=$(abs_srcdir)
-	$(SST_REGISTER_TOOL) SST_ELEMENT_TESTS      miranda=$(abs_srcdir)/tests
+	$(SST_REGISTER_TOOL) SST_ELEMENT_SOURCE     sstSpatter=$(abs_srcdir)
+	$(SST_REGISTER_TOOL) SST_ELEMENT_TESTS      sstSpatter=$(abs_srcdir)/tests

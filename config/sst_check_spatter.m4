@@ -46,8 +46,6 @@ AC_DEFUN([SST_CHECK_SPATTER],
   AC_SUBST([SPATTER_LDFLAGS])
   AC_SUBST([SPATTER_LIB])
   AC_SUBST([SPATTER_LIBDIR])
-  AS_IF([test "x$sst_check_spatter_happy" = "xyes"], [AC_DEFINE([HAVE_SPATTER],[1],[Defines whether we have Spatter])])
-  AM_CONDITIONAL([USE_SPATTER], [test "x$sst_check_spatter_happy" = "xyes"])
   AC_DEFINE_UNQUOTED([SPATTER_LIBDIR], ["$SPATTER_LIBDIR"], [Path to Spatter library])
 
   AC_MSG_CHECKING([for Spatter])

@@ -83,7 +83,7 @@ public:
         { "cache_line_size",  "The size of the cache line that this prefetcher is attached to, default is 64-bytes", "64" },
         { "maxmemreqpending", "Set the maximum number of requests allowed to be pending", "16" },
         { "verbose",               "Sets the verbosity of output produced by the CPU",     "0" },
-        { "generator",        "The generator to be loaded for address creation", "sstSpatter.SingleStreamGenerator" },
+        { "generator",        "The generator to be loaded for address creation", "sstSpatter.SpatterGenerator" },
         { "clock",            "Clock for the base CPU", "2GHz" },
         { "memoryinterface",  "Sets the memory interface module to use", "memHierarchy.standardInterface" },
         { "pagecount", "Sets the number of pages the system can allocate", "4194304" },
