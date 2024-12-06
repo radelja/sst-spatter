@@ -1,2 +1,0 @@
-STDERR: This file is used to test Ariel IO redirection functionality.
-STDERR: This is the second line in the file.

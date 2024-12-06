@@ -1,3 +1,0 @@
-unlink 'unlink-test-file' failed, error No such file or directory 
-open( 'unlink-test-file' ) succeeded
-unlink 'unlink-test-file' succeeded
