@@ -22,6 +22,6 @@ libsstSpatter_la_LDFLAGS = -module -avoid-version \
 	$(SPATTER_LDFLAGS) $(SPATTER_LIB) -Wl,-R$(SPATTER_LIBDIR)
 
 install-exec-hook:
-	$(SST_REGISTER_TOOL) sstSpatter  			sstSpatter_LIBDIR=$(abs_srcdir)
+	$(SST_REGISTER_TOOL) sstSpatter  			sstSpatter_LIBDIR=$(abs_srcdir)/.libs
 	$(SST_REGISTER_TOOL) SST_ELEMENT_SOURCE     sstSpatter=$(abs_srcdir)
 	$(SST_REGISTER_TOOL) SST_ELEMENT_TESTS      sstSpatter=$(abs_srcdir)/../tests
