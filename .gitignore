@@ -14,8 +14,12 @@ autom4te.cache
 config.log
 config.status
 configure
+libltdl
 libtool
 tags
 .DS_Store
 *.pdf
 *.dot
+*~
+sst_test_outputs/
+stats.out

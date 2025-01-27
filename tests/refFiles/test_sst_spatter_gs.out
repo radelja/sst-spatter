@@ -1,0 +1,17 @@
+0:cpu:RequestGenCPU[RequestGenCPU:43]: Configured CPU to allow 16 maximum Load requests to be memory to be outstanding.
+0:cpu:RequestGenCPU[RequestGenCPU:45]: Configured CPU to allow 16 maximum Store requests to be memory to be outstanding.
+0:cpu:RequestGenCPU[RequestGenCPU:47]: Configured CPU to allow 16 maximum Custom requests to be memory to be outstanding.
+0:cpu:RequestGenCPU[RequestGenCPU:54]: CPU clock configured for 2GHz
+0:cpu:RequestGenCPU[RequestGenCPU:60]: Memory interface to be loaded is: memHierarchy.standardInterface
+0:cpu:RequestGenCPU[RequestGenCPU:75]: Loaded memory interface successfully.
+0:cpu:RequestGenCPU[RequestGenCPU:103]: Generator loaded successfully.
+0:cpu:RequestGenCPU[RequestGenCPU:160]: Miranda CPU Configuration:
+0:cpu:RequestGenCPU[RequestGenCPU:161]: - Max requests per cycle:         2
+0:cpu:RequestGenCPU[RequestGenCPU:162]: - Max reorder lookups             16
+0:cpu:RequestGenCPU[RequestGenCPU:163]: - Clock:                          2GHz
+0:cpu:RequestGenCPU[RequestGenCPU:164]: - Cache line size:                64 bytes
+0:cpu:RequestGenCPU[RequestGenCPU:165]: - Max Load requests pending:      16
+0:cpu:RequestGenCPU[RequestGenCPU:166]: - Max Store requests pending:     16
+0:cpu:RequestGenCPU[RequestGenCPU:167]: - Max Custom requests pending:     16
+0:cpu:RequestGenCPU[RequestGenCPU:168]: Configuration completed.
+Simulation is complete, simulated time: 880.6 us
