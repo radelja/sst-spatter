@@ -1,0 +1,88 @@
+name: Build SST Spatter
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  SST_VERSION: 14.1.0
+
+concurrency:
+  group: ci-${{github.ref}}-${{github.event.pull_request.number || github.run_number}}
+  cancel-in-progress: true
+
+jobs:
+  build-sst-spatter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout SST Spatter
+        uses: actions/checkout@v4
+        with:
+          path: sst-spatter
+
+      - name: Install autogen.sh dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libtool-bin libltdl-dev
+          version: 1.0
+
+      - name: Set environment variables
+        run: |
+          echo "SPATTER_BUILD=$GITHUB_WORKSPACE/spatter/build_serial" >> $GITHUB_ENV
+          echo "SST_CORE_HOME=$HOME/local/sstcore-$SST_VERSION" >> $GITHUB_ENV
+          echo "SST_CORE_ROOT=$GITHUB_WORKSPACE/sstcore-$SST_VERSION" >> $GITHUB_ENV
+          echo "SST_SPATTER_HOME=$HOME/local/packages/sstspatter" >> $GITHUB_ENV
+
+      - name: Restore SST Core cache
+        id: cache-sst-core-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/local/sstcore-${{ env.SST_VERSION }}
+          key: cache-sst-core-${{ env.SST_VERSION }}
+
+      - name: Download SST Core
+        if: steps.cache-sst-core-restore.outputs.cache-hit != 'true'
+        run: |
+          wget https://github.com/sstsimulator/sst-core/releases/download/v${SST_VERSION}_Final/sstcore-${SST_VERSION}.tar.gz
+          mkdir -p sstcore-${SST_VERSION}
+          tar xfz sstcore-${SST_VERSION}.tar.gz -C sstcore-${SST_VERSION} --strip-components=1
+
+      - name: Install SST Core
+        if: steps.cache-sst-core-restore.outputs.cache-hit != 'true'
+        working-directory: sstcore-${{ env.SST_VERSION }}
+        run: |
+          ./configure --prefix=$SST_CORE_HOME --disable-mpi
+          make -j$(nproc) all
+          make -j$(nproc) install
+
+      - name: Save SST Core cache
+        if: steps.cache-sst-core-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/local/sstcore-${{ env.SST_VERSION }}
+          key: ${{ steps.cache-sst-core-restore.outputs.cache-primary-key }}
+
+      - name: Checkout Spatter
+        uses: actions/checkout@v4
+        with:
+          repository: hpcgarage/spatter
+          ref: spatter-devel
+          path: spatter
+
+      - name: Build Spatter
+        working-directory: spatter
+        run: |
+          cmake -B build_serial -S .
+          make -j$(nproc) -C build_serial
+
+      - name: Build SST Spatter
+        working-directory: sst-spatter
+        run: |
+          ./autogen.sh
+          ./configure --prefix=$SST_SPATTER_HOME --with-sst-core=$SST_CORE_HOME --with-spatter=$SPATTER_BUILD
+          make -j$(nproc) all
+          make -j$(nproc) install
