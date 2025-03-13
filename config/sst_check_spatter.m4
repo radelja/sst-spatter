@@ -13,13 +13,13 @@ AC_DEFUN([SST_CHECK_SPATTER],
 
   AS_IF([test "$sst_check_spatter_happy" = "yes"], [
     AS_IF([test ! -z "$with_spatter" -a "$with_spatter" != "yes"],
-      [SPATTER_CPPFLAGS="-I$with_spatter/../src/ -I$with_spatter/../src/Spatter -I$with_spatter/_deps/nlohmann_json-src/include"
+      [SPATTER_CPPFLAGS="-I$with_spatter/include -I$with_spatter/include/Spatter"
        CXXFLAGS="$AM_CXXFLAGS $CXXFLAGS"
        CPPFLAGS="$SPATTER_CPPFLAGS $AM_CPPFLAGS $CPPFLAGS"
-       SPATTER_LDFLAGS="-L$with_spatter/src/Spatter -L$with_spatter/src/"
+       SPATTER_LDFLAGS="-L$with_spatter/lib -L$with_spatter"
        LDFLAGS="$SPATTER_LDFLAGS $AM_LDFLAGS $LDFLAGS"
        SPATTER_LIB="-lSpatter"
-       SPATTER_LIBDIR="$with_spatter/src/Spatter/"],
+       SPATTER_LIBDIR="$with_spatter/lib"],
       [SPATTER_CXXFLAGS=
        SPATTER_CPPFLAGS=
        SPATTER_LDFLAGS=
@@ -27,8 +27,7 @@ AC_DEFUN([SST_CHECK_SPATTER],
        SPATTER_LIBDIR=])])
   
   AC_LANG_PUSH([C++])
-  AC_CHECK_HEADERS([nlohmann/json.hpp \
-                    Configuration.hh \
+  AC_CHECK_HEADERS([Configuration.hh \
                     Input.hh \
                     JSONParser.hh \
                     PatternParser.hh \
