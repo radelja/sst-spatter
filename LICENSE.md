@@ -11,6 +11,10 @@ Copyright (c) 2009-2024, NTESS
 
 All rights reserved.
 
+Copyright (c) 2023, HPCGarage Research Group at Georgia Tech
+
+All rights reserved.
+
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
