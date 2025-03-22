@@ -3,6 +3,17 @@ SST-Spatter is an external element that simulates gather and scatter operations 
 
 For more details about Spatter and its configuration options, see [Spatter](https://github.com/hpcgarage/spatter/blob/main/README.md).
 
+## Dependencies
+* SST 14.1.0
+* Spatter 2.0.0+ (spatter-devel brach)
+* Supported C++17 compiler (GCC, Clang)
+* GNU Make
+* GNU Autoconf 2.59+
+* GNU Automake 1.9.6+
+* GNU Libtool 1.5.22+
+* Python 3.6+
+* pandas
+
 ## Building SST-Spatter
 
 See [INSTALL.md](INSTALL.md) for build and installation instructions.
