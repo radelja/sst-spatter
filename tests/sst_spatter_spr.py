@@ -5,7 +5,7 @@ from sst import UnitAlgebra
 
 # Parse commandline arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--statfile", help="statistics file", default="./stats.out")
+parser.add_argument("--statfile", help="statistics file", default="./stats.csv")
 parser.add_argument("--statlevel", help="statistics level", type=int, default=16)
 
 args, unknown = parser.parse_known_args()
@@ -29,7 +29,6 @@ freq_turbo = "3.5GHz"
 l1_cache_params = {
     "cache_frequency" : freq_turbo,
     "coherence_protocol" : "mesi",
-    "replacement_policy" : "lru",
     "cache_size" : "48KiB",
     "associativity" : 12,
     "access_latency_cycles" : l1_latency, # Assume parallel tag/data lookup so no separate tag latency
@@ -47,7 +46,6 @@ l2_latency = l2_ltu_latency - l1_ltu_latency - l2_tag_latency - 2
 l2_cache_params = {
     "cache_frequency" : freq_turbo,
     "coherence_protocol" : protocol,
-    "replacement_policy" : "lru",
     "cache_size" : "2MiB",
     "associativity" : 16,
     # Total load-to-use = l2_latency
@@ -61,7 +59,6 @@ l2_cache_params = {
 l3_cache_params = {
     "cache_frequency" : freq_turbo,
     "coherence_protocol" : protocol,
-    "replacement_policy" : "random",
     "cache_size" : "1875KiB",
     "associativity" : 15,
     "access_latency_cycles" : 26,
@@ -121,20 +118,17 @@ gen.addParams({
    "args" : " ".join(unknown)
 })
 
-# Tell SST what statistics handling we want
-sst.setStatisticLoadLevel(statLevel)
-
-# Enable statistics outputs
-cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
-
 l1_cache = sst.Component("l1cache", "memHierarchy.Cache")
 l1_cache.addParams(l1_cache_params)
+l1_cache.setSubComponent("replacement", "memHierarchy.replacement.lru")
 
 l2_cache = sst.Component("l2cache", "memHierarchy.Cache")
 l2_cache.addParams(l2_cache_params)
+l2_cache.setSubComponent("replacement", "memHierarchy.replacement.lru")
 
 l3_cache = sst.Component("l3cache", "memHierarchy.Cache")
 l3_cache.addParams(l3_cache_params)
+l3_cache.setSubComponent("replacement", "memHierarchy.replacement.random")
 
 memctrl = sst.Component("memory", "memHierarchy.MemController")
 memctrl.addParams({
@@ -162,7 +156,10 @@ link_l2_l3.connect(  (l2_cache, "low_network_0", "100ps"),
 link_l3_mem.connect( (l3_cache, "low_network_0", "100ps", ),
                      (memctrl, "direct_link", "100ps") )
 
+# Enable statistics
+sst.setStatisticLoadLevel(statLevel)
 sst.setStatisticOutput("sst.statOutputCSV", {"filepath": statFile})
+sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
 
 ################### Sources ###################
 # This config is compiled from various sources including
