@@ -32,7 +32,7 @@ make install
 ```
 
 ## SST-Spatter Build and Installation
-1. CLone the SST-Spatter element.
+1. Clone the SST-Spatter element.
 ```
 cd $HOME/scratch/src
 git clone https://github.com/hpcgarage/sst-spatter.git

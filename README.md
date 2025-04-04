@@ -22,10 +22,10 @@ See [INSTALL.md](INSTALL.md) for build and installation instructions.
 
 SST-Spatter supports the same command-line arguments as Spatter; see [Running Spatter](https://github.com/hpcgarage/spatter/blob/main/README.md#running-spatter) for details. In addition to these arguments, the statistics level and statistics output file can be specified with the `--statlevel` and `--statfile` flags.
 
-Note: the SST-Spatter command-line arguments must be preceded by `--`, so they can be appended to the model options and passed to the SST configuration file.
+Note: the SST-Spatter command-line arguments must be preceded by `--` so they can be appended to the model options and passed to the SST configuration file.
 
 ```
-sst $SST_SPATTER_HOME/src/tests/sst_spatter.py -- -p UNIFORM:8:1 -l$((2**16))
+sst tests/sst_spatter_spr.py -- -p UNIFORM:8:1 -l$((2**16))
 
 0:cpu:RequestGenCPU[RequestGenCPU:43]: Configured CPU to allow 16 maximum Load requests to be memory to be outstanding.
 0:cpu:RequestGenCPU[RequestGenCPU:45]: Configured CPU to allow 16 maximum Store requests to be memory to be outstanding.
@@ -58,7 +58,7 @@ sst $SST_SPATTER_HOME/src/tests/sst_spatter.py -- -p UNIFORM:8:1 -l$((2**16))
 Simulation is complete, simulated time: 737.562 us
 ```
 
-This will generate output to both the command-line and a statistics file, named `stats.out` by default.
+This will generate output to both the command-line and a statistics file, named `stats.csv` by default.
 
 ## SST-Spatter Output
 The output to the command-line contains SST configuration information, which is specified in the SST configuration file.
@@ -66,7 +66,7 @@ The output to the command-line contains SST configuration information, which is 
 The statistics file contains the SST-Spatter statistics output for the simulated runs, saved in a CSV file format.
 
 ```
-cat stats.out
+head -n 19 stats.csv
 
 ComponentName, StatisticName, StatisticSubId, StatisticType, SimTime, Rank, Sum.u64, SumSQ.u64, Count.u64, Min.u64, Max.u64
 cpu, read_reqs, , Accumulator, 737561682, 0, 466944, 466944, 466944, 1, 1
@@ -92,7 +92,7 @@ cpu, cycles, , Accumulator, 737561682, 0, 2578887, 2578887, 2578887, 1, 1
 To compare this output with Spatter runs, you can use the [spatter_stats.py](tools/spatter_stats.py) helper script to convert the data in the statistics file into Spatter-like statistics.
 
 ```
-python3 $SST_SPATTER_HOME/src/tools/spatter_stats.py stats.out
+python3 tools/spatter_stats.py stats.csv
 
 config         bytes          time(s)        bw(MB/s)       cycles         
 0              4194304        0.000737562    5686.72        2578887
