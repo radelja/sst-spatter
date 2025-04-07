@@ -22,4 +22,4 @@ tags
 *.dot
 *~
 sst_test_outputs/
-stats.out
+stats.csv

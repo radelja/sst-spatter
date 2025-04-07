@@ -98,7 +98,7 @@ RequestGenCPU::RequestGenCPU(SST::ComponentId_t id, SST::Params& params) :
 
         memMgr = new MirandaMemoryManager(out, pageSize, pageCount, policy);
 
-        reqGen = loadUserSubComponent<RequestGenerator>("generator", ComponentInfo::INSERT_STATS);
+        reqGen = loadUserSubComponent<RequestGenerator>("generator", ComponentInfo::SHARE_STATS);
         if (reqGen) {
             out->verbose(CALL_INFO, 1, 0, "Generator loaded successfully.\n");
 	    registerAsPrimaryComponent();
@@ -111,7 +111,7 @@ RequestGenCPU::RequestGenCPU(SST::ComponentId_t id, SST::Params& params) :
 
 		out->verbose(CALL_INFO, 1, 0, "Request generator to be loaded is: %s\n", reqGenModName.c_str());
 		Params genParams = params.get_scoped_params("generatorParams");
-		reqGen = loadAnonymousSubComponent<RequestGenerator>( reqGenModName, "generator", 0, ComponentInfo::INSERT_STATS, genParams);
+		reqGen = loadAnonymousSubComponent<RequestGenerator>( reqGenModName, "generator", 0, ComponentInfo::SHARE_STATS, genParams);
 		if(NULL == reqGen) {
 			out->fatal(CALL_INFO, -1, "Failed to load generator: %s\n", reqGenModName.c_str());
 		} else {
@@ -205,7 +205,7 @@ void RequestGenCPU::loadGenerator( const std::string& name, SST::Params& params)
 
 	out->verbose(CALL_INFO, 1, 0, "generator to be loaded is: %s\n", name.c_str());
 
-	reqGen = loadAnonymousSubComponent<RequestGenerator>( name, "generator", 0, ComponentInfo::SHARE_NONE, params );
+	reqGen = loadAnonymousSubComponent<RequestGenerator>( name, "generator", 0, ComponentInfo::SHARE_STATS, params );
 
 	if(NULL == reqGen) {
 	    out->fatal(CALL_INFO, -1, "Failed to load generator: %s\n", name.c_str());

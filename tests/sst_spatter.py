@@ -4,7 +4,7 @@ import argparse
 
 # Parse commandline arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--statfile", help="statistics file", default="./stats.out")
+parser.add_argument("--statfile", help="statistics file", default="./stats.csv")
 parser.add_argument("--statlevel", help="statistics level", type=int, default=16)
 
 args, unknown = parser.parse_known_args()
@@ -28,25 +28,19 @@ gen.addParams({
     "args" : " ".join(unknown)
 })
 
-# Tell SST what statistics handling we want
-sst.setStatisticLoadLevel(statLevel)
-
-# Enable statistics outputs
-comp_cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
-
 comp_l1cache = sst.Component("l1cache", "memHierarchy.Cache")
 comp_l1cache.addParams({
       "access_latency_cycles" : "2",
       "cache_frequency" : "2 Ghz",
-      "replacement_policy" : "lru",
       "coherence_protocol" : "MESI",
       "associativity" : "4",
       "cache_line_size" : "64",
-      "prefetcher" : "cassini.StridePrefetcher",
       "debug" : "0",
       "L1" : "1",
       "cache_size" : "32KB"
 })
+comp_l1cache.setSubComponent("prefetcher", "cassini.StridePrefetcher")
+comp_l1cache.setSubComponent("replacement", "memHierarchy.replacement.lru")
 
 comp_memctrl = sst.Component("memory", "memHierarchy.MemController")
 comp_memctrl.addParams({
@@ -67,4 +61,7 @@ link_cpu_cache_link.setNoCut()
 link_mem_bus_link = sst.Link("link_mem_bus_link")
 link_mem_bus_link.connect( (comp_l1cache, "low_network_0", "50ps"), (comp_memctrl, "direct_link", "50ps") )
 
+# Enable statistics
+sst.setStatisticLoadLevel(statLevel)
 sst.setStatisticOutput("sst.statOutputCSV", {"filepath": statFile})
+sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})

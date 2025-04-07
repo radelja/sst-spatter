@@ -54,27 +54,6 @@ public:
         { "start_target",        "Sets the start address of the target array", "0" }
     )
 
-    SST_ELI_DOCUMENT_STATISTICS(
-        { "split_read_reqs",     "Number of read requests split over a cache line boundary", "requests", 2 },
-        { "split_write_reqs",    "Number of write requests split over a cache line boundary", "requests", 2 },
-        { "split_custom_reqs",   "NUmber of custom requests split over a cache line boundary", "requests", 2 },
-        { "read_reqs",           "Number of read requests issued", "requests", 1 },
-        { "write_reqs",          "Number of write requests issued", "requests", 1 },
-        { "custom_reqs",         "Number of custom requests issued", "requests", 1 },
-        { "completed_reqs",      "Number of completed requests", "requests", 2 },
-        { "total_bytes_read",    "Count the total bytes requested by read operations", "bytes", 1 },
-        { "total_bytes_write",   "Count the total bytes requested by write operations", "bytes", 1 },
-        { "total_bytes_custom",  "Count the total bytes requested by custom operations", "bytes", 1 },
-        { "req_latency",         "Running total of all latency for all requests", "ns", 2 },
-        { "cycles_with_issue",   "Number of cycles which CPU was able to issue requests", "cycles", 1 },
-        { "cycles_no_issue",     "Number of cycles which CPU was not able to issue requests", "cycles", 1 },
-        { "time",                "Nanoseconds spent issuing requests", "ns", 1 },
-        { "cycles_hit_fence",    "Number of issue cycles which stop issue at a fence", "cycles", 2 },
-        { "cycles_max_reorder",  "Number of issue cycles which hit maximum reorder lookup",	"cycles", 2 },
-        { "cycles_max_issue",    "Cycles with maximum operation issue", "cycles", 2 },
-        { "cycles",              "Cycles executed", "cycles", 1 }
-    )
-
 private:
     void countArgs(const std::string &args, int32_t &argc);
     void tokenizeArgs(const std::string &args, const int32_t &argc, char ***argv);
