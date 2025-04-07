@@ -113,8 +113,8 @@ jobs:
       - name: Build Spatter
         working-directory: spatter
         run: |
-          cmake -B build_serial -S .
-          make -j$(nproc) -C build_serial
+          cmake -DCMAKE_INSTALL_PREFIX=${HOME}/local/packages/spatter -B build_serial -S .
+          make -j$(nproc) all -C build_serial; make install -C build_serial
 
       - name: Build SST Spatter
         working-directory: sst-spatter
@@ -122,7 +122,7 @@ jobs:
           ./autogen.sh
           ./configure --prefix=${HOME}/local/packages/sstspatter \
             --with-sst-core=${HOME}/local/sstcore-${SST_VERSION} \
-            --with-spatter=${GITHUB_WORKSPACE}/spatter/build_serial
+            --with-spatter=${HOME}/packages/spatter
           make -j$(nproc) all; make install
 
       - name: Run SST Spatter
