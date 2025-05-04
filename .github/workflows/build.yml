@@ -41,13 +41,6 @@ jobs:
           path: ~/local/sstcore-${{ env.SST_VERSION }}
           key: cache-sst-core-${{ env.SST_VERSION }}
 
-      - name: Restore SST Elements cache
-        id: cache-sst-elements-restore
-        uses: actions/cache/restore@v4
-        with:
-          path:  ~/local/sstelements-${{ env.SST_VERSION }}
-          key: cache-sst-elements-${{ env.SST_VERSION }}
-
       - name: Download SST Core
         if: steps.cache-sst-core-restore.outputs.cache-hit != 'true'
         run: |
@@ -62,15 +55,20 @@ jobs:
           ./configure --prefix=${HOME}/local/sstcore-${SST_VERSION} --disable-mpi
           make -j$(nproc) all; make install
 
+      - name: Save SST Core cache
+        if: steps.cache-sst-core-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ~/local/sstcore-${{ env.SST_VERSION }}
+          key: ${{ steps.cache-sst-core-restore.outputs.cache-primary-key }}
+
       - name: Download SST Elements
-        if: steps.cache-sst-elements-restore.outputs.cache-hit != 'true'
         run: |
           wget https://github.com/sstsimulator/sst-elements/archive/refs/tags/v${SST_VERSION}_Final.tar.gz -O sstelements-${SST_VERSION}.tar.gz
           mkdir -p sstelements-${SST_VERSION}
           tar xfz sstelements-${SST_VERSION}.tar.gz -C sstelements-${SST_VERSION} --strip-components=1
 
       - name: Ignore unused elements
-        if: steps.cache-sst-elements-restore.outputs.cache-hit != 'true'
         working-directory: sstelements-${{ env.SST_VERSION }}
         run: |
           for element in src/sst/elements/*/; do
@@ -81,27 +79,12 @@ jobs:
           done
 
       - name: Install SST Elements
-        if: steps.cache-sst-elements-restore.outputs.cache-hit != 'true'
         working-directory: sstelements-${{ env.SST_VERSION }}
         run: |
           ./autogen.sh
           ./configure --prefix=${HOME}/local/sstelements-${SST_VERSION} \
             --with-sst-core=${HOME}/local/sstcore-${SST_VERSION}
           make -j$(nproc) all; make install
-
-      - name: Save SST Core cache
-        if: steps.cache-sst-core-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: ~/local/sstcore-${{ env.SST_VERSION }}
-          key: ${{ steps.cache-sst-core-restore.outputs.cache-primary-key }}
-
-      - name: Save SST Elements cache
-        if: steps.cache-sst-elements-restore.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path:  ~/local/sstelements-${{ env.SST_VERSION }}
-          key: ${{ steps.cache-sst-elements-restore.outputs.cache-primary-key }}
 
       - name: Checkout Spatter
         uses: actions/checkout@v4
@@ -126,6 +109,5 @@ jobs:
           make -j$(nproc) all; make install
 
       - name: Run SST Spatter Tests
-        working-directory: sst-spatter
         run: |
           sst-test-elements -w "*spatter*"
