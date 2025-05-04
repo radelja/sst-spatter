@@ -1,4 +1,4 @@
-name: Build and Run
+name: Build and Test
 
 on:
   push:
@@ -16,7 +16,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-run:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout SST Spatter
@@ -74,7 +74,7 @@ jobs:
         working-directory: sstelements-${{ env.SST_VERSION }}
         run: |
           for element in src/sst/elements/*/; do
-            if [[ ! "${element}" == *"memHierarchy/" ]]; then
+            if [[ ! "${element}" == *"memHierarchy/" && ! "${element}" == *"cassini/" ]]; then
               cd ${GITHUB_WORKSPACE}/sstelements-${SST_VERSION}/${element}
               touch .ignore
             fi
@@ -125,7 +125,7 @@ jobs:
             --with-spatter=${HOME}/local/packages/spatter
           make -j$(nproc) all; make install
 
-      - name: Run SST Spatter
+      - name: Run SST Spatter Tests
         working-directory: sst-spatter
         run: |
-          sst tests/sst_spatter_spr.py -- -p UNIFORM:8:1
+          sst-test-elements -w "*spatter*"
