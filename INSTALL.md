@@ -5,13 +5,13 @@
 ### SST 14.1.0
 See [Detailed Installation Instructions](https://sst-simulator.org/SSTPages/SSTBuildAndInstall_14dot1dot0_SeriesDetailedBuildInstructions/) for installing SST 14.1.0.
 
-### Spatter 2.0.0+ (spatter-devel branch)
-1. Clone the Spatter benchmark.
+### Spatter 2.1
+1. Download the Spatter benchmark.
 ```
-cd $HOME/scratch/src
-git clone https://github.com/hpcgarage/spatter.git
-cd spatter
-git checkout spatter-devel
+wget https://github.com/hpcgarage/spatter/archive/refs/tags/v2.1.tar.gz -O spatter-2.1.tar.gz
+mkdir -p spatter-2.1
+tar -xvzf spatter-2.1.tar.gz -C spatter-2.1 --strip-components=1
+cd spatter-2.1
 ```
 
 2. Set the home directory environment variable of the Spatter installation.
