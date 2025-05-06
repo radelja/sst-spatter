@@ -5,7 +5,7 @@ For more details about Spatter and its configuration options, see [Spatter](http
 
 ## Dependencies
 * SST 14.1.0
-* Spatter 2.0.0+ (spatter-devel brach)
+* Spatter 2.1+
 * Supported C++17 compiler (GCC, Clang)
 * GNU Make
 * GNU Autoconf 2.59+
