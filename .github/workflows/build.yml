@@ -10,6 +10,7 @@ on:
 
 env:
   SST_VERSION: 14.1.0
+  SPATTER_VERSION: 2.1
 
 concurrency:
   group: ci-${{github.ref}}-${{github.event.pull_request.number || github.run_number}}
@@ -93,11 +94,33 @@ jobs:
           ref: spatter-devel
           path: spatter
 
-      - name: Build Spatter
-        working-directory: spatter
+      - name: Restore Spatter cache
+        id: cache-spatter-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/local/packages/spatter-${{ env.SPATTER_VERSION }}
+          key: cache-spatter-${{ env.SPATTER_VERSION }}
+
+      - name: Download Spatter
+        if: steps.cache-spatter-restore.outputs.cache-hit != 'true'
         run: |
-          cmake -DCMAKE_INSTALL_PREFIX=${HOME}/local/packages/spatter -B build_serial -S .
+          wget https://github.com/hpcgarage/spatter/archive/refs/tags/v${SPATTER_VERSION}.tar.gz -O spatter-${SPATTER_VERSION}.tar.gz
+          mkdir -p spatter-${SPATTER_VERSION}
+          tar xfz spatter-${SPATTER_VERSION}.tar.gz -C spatter-${SPATTER_VERSION}  --strip-components=1
+
+      - name: Install Spatter
+        if: steps.cache-spatter-restore.outputs.cache-hit != 'true'
+        working-directory: spatter-${{ env.SPATTER_VERSION }}
+        run: |
+          cmake -DCMAKE_INSTALL_PREFIX=${HOME}/local/packages/spatter-${SPATTER_VERSION} -B build_serial -S .
           make -j$(nproc) all -C build_serial; make install -C build_serial
+
+      - name: Save Spatter cache
+        if: steps.cache-spatter-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path:  ~/local/packages/spatter-${{ env.SPATTER_VERSION }}
+          key: cache-spatter-${{ env.SPATTER_VERSION }}
 
       - name: Build SST Spatter
         working-directory: sst-spatter
@@ -105,7 +128,7 @@ jobs:
           ./autogen.sh
           ./configure --prefix=${HOME}/local/packages/sstspatter \
             --with-sst-core=${HOME}/local/sstcore-${SST_VERSION} \
-            --with-spatter=${HOME}/local/packages/spatter
+            --with-spatter=${HOME}/local/packages/spatter-${SPATTER_VERSION}
           make -j$(nproc) all; make install
 
       - name: Run SST Spatter Tests
