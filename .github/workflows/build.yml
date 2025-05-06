@@ -87,13 +87,6 @@ jobs:
             --with-sst-core=${HOME}/local/sstcore-${SST_VERSION}
           make -j$(nproc) all; make install
 
-      - name: Checkout Spatter
-        uses: actions/checkout@v4
-        with:
-          repository: hpcgarage/spatter
-          ref: spatter-devel
-          path: spatter
-
       - name: Restore Spatter cache
         id: cache-spatter-restore
         uses: actions/cache/restore@v4
