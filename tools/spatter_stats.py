@@ -26,7 +26,8 @@ def print_stats(df: pd.DataFrame):
         stat_name = row.StatisticName.strip()
         stat_value = row._asdict()['_7']
 
-        if stat_name in ['total_bytes_read', 'total_bytes_write']:
+        #if stat_name in ['total_bytes_read', 'total_bytes_write']:
+        if stat_name == 'total_bytes_read':
             bytes += stat_value
 
         elif stat_name == 'cycles':
