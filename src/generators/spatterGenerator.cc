@@ -37,6 +37,8 @@ void SpatterGenerator::build(Params& params)
 
     out = new Output("SpatterGenerator[@p:@l]: ", verbose, 0, Output::STDOUT);
 
+    numIssuedReqs = 0;
+
     datawidth  = params.find<uint32_t>("datawidth", 8);
 
     patternIdx = 0;
@@ -143,32 +145,18 @@ void SpatterGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
             out->fatal(CALL_INFO, -1, "Error: invalid kernel.\n");
         }
 
+        ++numIssuedReqs;
         updateIndices();
     }
 }
 
 bool SpatterGenerator::isFinished()
 {
-    if (configFin) {
-        const Spatter::ConfigurationBase *prevConfig = cl.configs[configIdx-1].get();
-        uint64_t expectedCount = getPatternSize(prevConfig) * prevConfig->count;
-        uint64_t recordedCount = statCompletedReqs->getCollectionCount();
-
-        assert(recordedCount);
-
-        if (0 == prevConfig->kernel.compare("gs")) {
-            // GS patterns expect twice the number of bytes.
-            expectedCount <<= 1;
-        } else if ((0 == prevConfig->kernel.compare("gather")) ||
-                   (0 == prevConfig->kernel.compare("scatter"))) {
-            expectedCount <<= 1;
-        }
-
-        if (recordedCount == expectedCount) {
-            // The requests associated with the previous run have completed.
-            performGlobalStatisticOutput();
-            configFin = false;
-        }
+    if (configFin && numIssuedReqs == statCompletedReqs->getCollectionCount()) {
+        // The requests associated with the previous run have completed.
+        performGlobalStatisticOutput();
+        numIssuedReqs = 0;
+        configFin = false;
     }
 
     return (configIdx == cl.configs.size());
