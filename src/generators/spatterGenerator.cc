@@ -145,7 +145,7 @@ void SpatterGenerator::generate(MirandaRequestQueue<GeneratorRequest*>* q)
             out->fatal(CALL_INFO, -1, "Error: invalid kernel.\n");
         }
 
-        ++numIssuedReqs;
+        numIssuedReqs += 2;
         updateIndices();
     }
 }
